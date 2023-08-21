@@ -28,13 +28,8 @@ serve(async (req) => {
             db: MYSQL_DBNAME
         })
         
-        const insertResult = await mySqlClient.execute(`
-            INSERT INTO diary (
-                ??, ??, ??
-            ) VALUES (
-                ?, ?, ?
-            );
-        `, [
+        const command = await mySqlClient.execute(`INSERT INTO diary (??, ??, ??) VALUES (?, ?, ?); `, 
+            [
             "date",
             "weather",
             "text",
@@ -48,10 +43,29 @@ serve(async (req) => {
         mySqlClient.close()
         return new Response("successed");
     }
+
+    // 日記の取得
+    // 引数:{date}
+    if (req.method === "GET" && pathname === "/get-diary") {
+        const date = new URL(req.url).searchParams.get("date");
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+
+        const command = await mySqlClient.execute(`SELECT * FROM diary;`)
+
+        // MySQLのDBとの通信を終了する
+        mySqlClient.close()
+        return new Response(JSON.stringify(command.rows));
+    }
+
     return serveDir(req, {
         fsRoot: "public",
         urlRoot: "",
         showDirListing: true,
         enableCors: true,
-      });
+    });
 })

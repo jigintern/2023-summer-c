@@ -10,6 +10,7 @@
     <input type="text" id="password">
     <button id="auth">Authentication</button>
   </div>
+  <button id="get">get</button>
 
   Server:<span id="server_response"></span>
 
@@ -28,6 +29,10 @@
         })
       });
       document.getElementById("server_response").innerText = await response.text();
+    };
+    document.getElementById("get").onclick = async () => {
+      const response = await fetch("/get-diary");
+      console.log(await response.text());
     };
   </script>
 </body>

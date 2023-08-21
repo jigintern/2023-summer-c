@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <div>
+    <input type="text" id="password">
+    <button id="auth">Authentication</button>
+  </div>
+  <button id="get">get</button>
+
+  Server:<span id="server_response"></span>
+
+  <script type="module">
+    // greetingを叩くためのjavascriptの実装
+    const today = '2023/03/31';
+    document.getElementById("auth").onclick = async () => {
+      const pass = document.getElementById("password").value;
+      const response = await fetch("/insert-diary",{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          date: today,
+          weather: 2,
+          text: pass,
+        })
+      });
+      document.getElementById("server_response").innerText = await response.text();
+    };
+    document.getElementById("get").onclick = async () => {
+      const response = await fetch("/get-diary");
+      console.log(await response.text());
+    };
+  </script>
+</body>
+
+</html>

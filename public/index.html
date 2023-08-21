@@ -1,28 +1,72 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <title>ようこそ、jigインターンへ！</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-      }
-      html, body {
-        height: 100vh;
-        width: 100%;
-      }
-      body {
-        display: grid;
-        place-content: center;
-      }
-    </style>
-    <script type="module">
-      const message = await fetch("/welcome-message")
-      document.querySelector("body").innerHTML = `<h1>${await message.text()}</h1>`
-    </script>
-  </head>
-  <body>
-  </body>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <title>にっきアプリ（仮）</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+
+<body>
+  <section class="section">
+    <div div="container">
+      <h1 class="title">にっきアプリ（仮）</h1>
+      <form method="post">
+        <div class="field is-grouped">
+          <div class="control">
+            <input class="input" type="date" />
+          </div>
+          <div class="control">
+            <select  name="weather" class="input">
+              <option value="">--てんきをせんたく--</option>
+              <option value="sunny">はれ</option>
+              <option value="cloudy">くもり</option>
+              <option value="rainy">あめ</option>
+            </select>
+          </div>
+        </div>
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input class="input" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
+          </div>
+          <div class="control">
+            <button class="button is-primary">AI</button>
+          </div>
+        </div>
+          <div class="control is-expanded">
+            <textarea class="textarea" name="diary" placeholder="ここににっきをにゅうりょく" row="2"></textarea>
+          </div>
+          <div class="control">
+            <button class="button is-link">とうこう</button>
+        </div>
+      </form>
+
+      <div class="table-container">
+        <table class="table is-striped is-fullwidth">
+          <thead>
+            <tr>
+              <th>日</th>
+              <th>天</th>
+              <th>にっき</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>08/21</td>
+              <td>はれ</td>
+              <td>きょうはほげほげ日よりでした。</td>
+            </tr>
+            <tr>
+              <td>08/22</td>
+              <td>くもり</td>
+              <td>きょうはふがふが日よりでした。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</body>
+
 </html>

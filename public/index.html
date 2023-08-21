@@ -12,20 +12,32 @@
   <section class="section">
     <div div="container">
       <h1 class="title">にっきアプリ（仮）</h1>
+
       <form method="post">
-        <div class="field is-grouped">
-          <div class="control">
-            <input class="input" type="date" />
+        <div class="columns is-mobile">
+          <div class="column">
+            <div class="field">
+              <label class="label">ひづけ</label>
+              <div class="control">
+                <input class="input" type="date" />
+              </div>
+            </div>
           </div>
-          <div class="control">
-            <select  name="weather" class="input">
-              <option value="">--てんきをせんたく--</option>
-              <option value="sunny">はれ</option>
-              <option value="cloudy">くもり</option>
-              <option value="rainy">あめ</option>
-            </select>
+          <div class="column">
+            <div class="field">
+              <label class="label">てんき</label>
+              <div class="control">
+                <select name="weather" class="input">
+                  <option value="">--てんきをせんたく--</option>
+                  <option value="sunny">はれ</option>
+                  <option value="cloudy">くもり</option>
+                  <option value="rainy">あめ</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
+        <label class="label">AIにおまかせ</label>
         <div class="field has-addons">
           <div class="control is-expanded">
             <input class="input" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
@@ -34,11 +46,14 @@
             <button class="button is-primary">AI</button>
           </div>
         </div>
-          <div class="control is-expanded">
+        <div class="field">
+          <label class="label">にっきをかく</label>
+          <div class="control">
             <textarea class="textarea" name="diary" placeholder="ここににっきをにゅうりょく" row="2"></textarea>
           </div>
-          <div class="control">
-            <button class="button is-link">とうこう</button>
+        </div>
+        <div class="control">
+          <button class="button is-link">とうこう</button>
         </div>
       </form>
 

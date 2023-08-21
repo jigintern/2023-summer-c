@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Noto+Sans+JP&family=Yomogi&display=swap');
+
+h1, thead {
+    font-family: 'Dela Gothic One', cursive;
+}
+
+* {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+tr td:last-child {
+    font-family: 'Yomogi', cursive;
+}

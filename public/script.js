@@ -6,8 +6,7 @@ window.onload = async () => {
   if (json && json["diary"] !== undefined) {
     for (const diary of json["diary"]) {
       document.getElementById("diary-list").innerHTML += await
-      `
-      <tr class="id" id="id"><td id="date">${diary[date]}</td><td class="weather" id="weather"><img class="img" src="${diary[weather]}.png" alt="weather"/></td><td class="text" id="text">${diary[text]}</td></tr>`
+      `<tr class="id" id="id"><td id="date">${diary[date]}</td><td class="weather" id="weather"><img class="img" src="${diary[weather]}.png" alt="weather"/></td><td class="text" id="text">${diary[text]}</td></tr>`
     }
   }
 }
@@ -27,6 +26,5 @@ document.getElementById("diary-button").onclick = async() => {
       text: text,
     })
   });
-  document.getElementById("diary-list").innerHTML = await `
-  <tr class="id" id="id"><td id="date">${diary[date]}</td><td class="weather" id="weather"><img class="img" src="${diary[weather]}.png" alt="weather"/></td><td class="text" id="text">${diary[text]}</td></tr>`;
+  document.getElementById("diary-list").innerHTML = await `<tr class="id" id="id"><td id="date">${diary[date]}</td><td class="weather" id="weather"><img class="img" src="${diary[weather]}.png" alt="weather"/></td><td class="text" id="text">${diary[text]}</td></tr>`;
 };

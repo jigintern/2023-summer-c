@@ -15,14 +15,14 @@
       <form method="post">
         <div class="field is-grouped">
           <div class="control">
-            <input class="input" type="date" />
+            <input id="date-input" class="input" type="date" />
           </div>
           <div class="control">
-            <select  name="weather" class="input">
+            <select id="weather-input" name="weather" class="input">
               <option value="">--てんきをせんたく--</option>
-              <option value="sunny">はれ</option>
-              <option value="cloudy">くもり</option>
-              <option value="rainy">あめ</option>
+              <option value="0">はれ</option>
+              <option value="1">くもり</option>
+              <option value="2">あめ</option>
             </select>
           </div>
         </div>
@@ -35,10 +35,10 @@
           </div>
         </div>
           <div class="control is-expanded">
-            <textarea class="textarea" name="diary" placeholder="ここににっきをにゅうりょく" row="2"></textarea>
+            <textarea id="text-input" class="textarea" name="diary" placeholder="ここににっきをにゅうりょく" row="2"></textarea>
           </div>
           <div class="control">
-            <button class="button is-link">とうこう</button>
+            <button id="diary-button" class="button is-link">とうこう</button>
         </div>
       </form>
 
@@ -51,7 +51,7 @@
               <th>にっき</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="diary-list">
             <tr>
               <td>08/21</td>
               <td>はれ</td>
@@ -68,5 +68,6 @@
     </div>
   </section>
 </body>
-
+<script type="module" src="script.js">
+</script>
 </html>

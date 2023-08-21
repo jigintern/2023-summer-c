@@ -1,7 +1,7 @@
 // 開始時に実行する
 // 日記の全件取得
 window.onload = async () => {
-  const response = await fetch("get_diary");
+  const response = await fetch("/get_diary");
   const json = await response?.json();
   if (json && json["diary"] !== undefined) {
     for (const diary of json["diary"]) {

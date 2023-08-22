@@ -30,7 +30,8 @@ document.getElementById("diary-button").onclick = async() => {
 };
 
 // 日記の自動生成
-document.getElementById("gpt-button").onclick = async () => {
+document.getElementById("gpt-button").onclick = async (e) => {
+  e.preventDefault();
   const words = document.getElementById("gpt-input").value;
   const response = await fetch("/gpt",{
     method: 'POST',

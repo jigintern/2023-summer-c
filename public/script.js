@@ -34,7 +34,7 @@ document.getElementById("diary-button").onclick = async(e) => {
   window.location.reload();
 };
 
-// 日記の自動生成
+// 日記の自動生成(GPT)
 document.getElementById("gpt-button").onclick = async (e) => {
   e.preventDefault();
   const words = document.getElementById("gpt-input").value;

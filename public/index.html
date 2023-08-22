@@ -54,10 +54,10 @@
         <label class="label">AIにおまかせ</label>
         <div class="field has-addons">
           <div class="control is-expanded">
-            <input class="input is-primary" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
+            <input id="gpt-input" class="input is-primary" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
           </div>
           <div class="control">
-            <button class="button is-primary">
+            <button id="gpt-button" class="button is-primary">
               <span class="icon">
                 <img src="img/robot.png" alt="AIアイコン" />
               </span>
@@ -100,7 +100,7 @@
             </tr>
           </thead>
           <tbody id="diary-list">
-            <tr>
+            <!-- <tr>
               <td>08/21</td>
               <td>
                 <figure class="image is-24x24">
@@ -117,7 +117,7 @@
                 </figure>
               </td>
               <td>きょうはふがふが日よりでした。</td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
       </div>

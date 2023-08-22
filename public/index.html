@@ -12,8 +12,21 @@
 <body>
   <section class="section">
     <div div="container">
-      <h1 class="title">にっきアプリ（仮）</h1>
-
+      <div class="columns is-mobile is-gapless is-centered is-vcentered">
+        <div class="column">
+          <figure class="image is-64x64 container">
+            <img src="img/bell.png" alt="ベル">
+          </figure>
+        </div>
+        <div class="column is-8">
+          <h1 class="title has-text-centered">にっきアプリ</h1>
+        </div>
+        <div class="column">
+          <figure class="image is-64x64 container">
+            <img src="img/home_icon.png" alt="家">
+          </figure>
+        </div>
+      </div>
       <form method="post">
         <div class="columns is-mobile">
           <div class="column">
@@ -44,17 +57,32 @@
             <input id="gpt-input" class="input is-primary" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
           </div>
           <div class="control">
-            <button id="gpt-button" class="button is-primary">AI</button>
+            <button id="gpt-button" class="button is-primary">
+              <span class="icon">
+                <img src="img/robot.png" alt="AIアイコン" />
+              </span>
+              <span>
+                AI
+              </span>
+            </button>
           </div>
         </div>
         <div class="field">
           <label class="label">にっきをかく</label>
           <div class="control">
-            <textarea id="text-input" class="textarea is-info" name="diary" placeholder="ここににっきをにゅうりょく" row="2"></textarea>
+            <textarea id="text-input" class="textarea is-info" name="diary" placeholder="ここににっきをにゅうりょく"
+              row="2"></textarea>
           </div>
         </div>
         <div class="control buttons is-right">
-          <button id="diary-button" class="button is-info">とうこう</button>
+          <button id="diary-button" class="button is-info">
+            <span class="icon">
+              <img src="img/pencil.png" alt="とうこうアイコン" />
+            </span>
+            <span>
+              とうこう
+            </span>
+          </button>
         </div>
       </form>
 
@@ -62,7 +90,11 @@
         <table class="table is-striped is-fullwidth">
           <thead>
             <tr>
-              <th>日</th>
+              <th>
+                <figure class="image is-24x24">
+                  <img src="img/calendar.png" alt="月日" />
+                </figure>
+              </th>
               <th>天</th>
               <th>にっき</th>
             </tr>
@@ -70,12 +102,20 @@
           <tbody id="diary-list">
             <!-- <tr>
               <td>08/21</td>
-              <td>はれ</td>
+              <td>
+                <figure class="image is-24x24">
+                  <img src="img/0.png" alt="はれ" />
+                </figure>
+              </td>
               <td>きょうはほげほげ日よりでした。</td>
             </tr>
             <tr>
               <td>08/22</td>
-              <td>くもり</td>
+              <td>
+                <figure class="image is-24x24">
+                  <img src="img/1.png" alt="くもり" />
+                </figure>
+              </td>
               <td>きょうはふがふが日よりでした。</td>
             </tr> -->
           </tbody>
@@ -86,4 +126,5 @@
 </body>
 <script type="module" src="script.js">
 </script>
+
 </html>

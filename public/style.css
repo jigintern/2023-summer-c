@@ -11,3 +11,9 @@ h1, thead {
 tr td:last-child {
     font-family: 'Yomogi', cursive;
 }
+
+.required::after {
+    content: " *";
+    color: red;
+    vertical-align: middle;
+  }

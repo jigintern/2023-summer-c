@@ -54,7 +54,7 @@ serve(async (req) => {
             db: MYSQL_DBNAME
         })
 
-        const command = await mySqlClient.execute(`SELECT * FROM diary;`)
+        const command = await mySqlClient.execute(`SELECT * FROM diary ORDER BY date ASC;`)
 
         // MySQLのDBとの通信を終了する
         mySqlClient.close()

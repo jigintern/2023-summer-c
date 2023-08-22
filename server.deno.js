@@ -8,6 +8,18 @@ import { serveDir } from "https://deno.land/std@0.180.0/http/file_server.ts";
 import "https://deno.land/std@0.193.0/dotenv/load.ts"
 import { Client } from "https://deno.land/x/mysql@v2.11.0/mod.ts"
 import * as CSV from "https://deno.land/std@0.170.0/encoding/csv.ts";
+import { fetchChat } from "https://code4fukui.github.io/ai_chat/fetchChat.js";
+
+const message =
+`# 命令
+以下の「制約」に基づいて、日記を出力してください。
+# 制約
+- 2文または3文で構成される。
+- 常体で書く。
+- 以下の「単語」を使用する。
+- 小学校4年生までで習う範囲の漢字を使用する。
+# 単語
+`
 
 serve(async (req) => {
     const pathname = new URL(req.url).pathname;
@@ -84,6 +96,18 @@ serve(async (req) => {
             case "雪":
                 return new Response(2);
         }
+    }
+
+    if (req.method === "POST" && pathname === "/generate-gpt")
+    {
+        const reqJson = await req.json();
+        const word = reqJson.words.split(/\s/);
+        console.log(word);
+        let question = message;
+        for (let i=0;i<word.length;i++)
+        question += "- " + word[i] + "\n";
+        const response = await fetchChat(question);
+        return new Response(JSON.stringify({ message: response }));
     }
 
     return serveDir(req, {

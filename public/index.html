@@ -123,8 +123,15 @@
       </div>
     </div>
   </section>
+  <script type="module">
+    const elem = document.getElementById("date-input");
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = ("00" + (now.getMonth()+1)).slice(-2);
+    const dd = ("00" + (now.getDate())).slice(-2);
+    elem.max = `${yyyy}-${mm}-${dd}`
+  </script>
+  <script type="module" src="script.js"></script>
 </body>
-<script type="module" src="script.js">
-</script>
 
 </html>

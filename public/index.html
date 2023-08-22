@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <title>にっきアプリ（仮）</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -17,7 +18,7 @@
         <div class="columns is-mobile">
           <div class="column">
             <div class="field">
-              <label class="label">ひづけ</label>
+              <label class="label required">ひづけ</label>
               <div class="control">
                 <input id="date-input" class="input" type="date" required />
               </div>
@@ -25,8 +26,8 @@
           </div>
           <div class="column">
             <div class="field">
-              <label class="label">てんき</label>
-              <div class="control">
+              <label class="label required">てんき</label>
+              <div class="control select">
                 <select id="weather-input" name="weather" class="input" required>
                   <option value="">--てんきをせんたく--</option>
                   <option value="0">はれ</option>
@@ -40,7 +41,7 @@
         <label class="label">AIにおまかせ</label>
         <div class="field has-addons">
           <div class="control is-expanded">
-            <input id="gpt-input" class="input" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
+            <input id="gpt-input" class="input is-primary" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
           </div>
           <div class="control">
             <button id="gpt-button" class="button is-primary">AI</button>
@@ -49,11 +50,11 @@
         <div class="field">
           <label class="label">にっきをかく</label>
           <div class="control">
-            <textarea id="text-input" class="textarea" name="diary" placeholder="ここににっきをにゅうりょく" row="2"></textarea>
+            <textarea id="text-input" class="textarea is-info" name="diary" placeholder="ここににっきをにゅうりょく" row="2"></textarea>
           </div>
         </div>
-        <div class="control">
-          <button id="diary-button" class="button is-link">とうこう</button>
+        <div class="control buttons is-right">
+          <button id="diary-button" class="button is-info">とうこう</button>
         </div>
       </form>
 
@@ -67,7 +68,7 @@
             </tr>
           </thead>
           <tbody id="diary-list">
-            <tr>
+            <!-- <tr>
               <td>08/21</td>
               <td>はれ</td>
               <td>きょうはほげほげ日よりでした。</td>
@@ -76,7 +77,7 @@
               <td>08/22</td>
               <td>くもり</td>
               <td>きょうはふがふが日よりでした。</td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
       </div>

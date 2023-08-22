@@ -27,7 +27,7 @@
           <div class="column">
             <div class="field">
               <label class="label">てんき</label>
-              <div class="control">
+              <div class="control select">
                 <select id="weather-input" name="weather" class="input" required>
                   <option value="">--てんきをせんたく--</option>
                   <option value="0">はれ</option>
@@ -41,7 +41,7 @@
         <label class="label">AIにおまかせ</label>
         <div class="field has-addons">
           <div class="control is-expanded">
-            <input class="input" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
+            <input class="input is-primary" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
           </div>
           <div class="control">
             <button class="button is-primary">AI</button>
@@ -50,11 +50,11 @@
         <div class="field">
           <label class="label">にっきをかく</label>
           <div class="control">
-            <textarea id="text-input" class="textarea" name="diary" placeholder="ここににっきをにゅうりょく" row="2"></textarea>
+            <textarea id="text-input" class="textarea is-info" name="diary" placeholder="ここににっきをにゅうりょく" row="2"></textarea>
           </div>
         </div>
         <div class="control">
-          <button id="diary-button" class="button is-link">とうこう</button>
+          <button id="diary-button" class="button is-info">とうこう</button>
         </div>
       </form>
 

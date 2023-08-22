@@ -18,10 +18,6 @@ document.getElementById("diary-button").onclick = async() => {
   // 天気の自動入力
   if(weather === "") {
     const response = await fetch("/get-weather?date=" + date)
-    if (response.text() === -1) {
-      window.alert("未来の日記です。天気を入力してください。");
-      return;
-    }
     weather = await response.text();
   }
   try {

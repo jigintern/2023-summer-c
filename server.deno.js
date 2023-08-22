@@ -47,7 +47,6 @@ serve(async (req) => {
     // 日記の取得
     // 引数:{date}
     if (req.method === "GET" && pathname === "/get-diary") {
-        const date = new URL(req.url).searchParams.get("date");
         const mySqlClient = await new Client().connect({    // データベースと接続
             hostname: MYSQL_HOSTNAME,
             username: MYSQL_USER,

@@ -11,10 +11,15 @@ window.onload = async () => {
 
 // 日記の追加
 document.getElementById("diary-button").onclick = async() => {
-
   const text = document.getElementById("text-input").value;
   const date = document.getElementById("date-input").value;
-  const weather = document.getElementById("weather-input").value;
+  let weather = document.getElementById("weather-input").value;
+
+  // 天気の自動入力
+  if(weather === "") {
+    const response = await fetch("/get-weather?date=" + date)
+    weather = await response.text();
+  }
   const response = await fetch("/insert-diary",{
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -24,8 +29,7 @@ document.getElementById("diary-button").onclick = async() => {
       text: text,
     })
   });
-  document.getElementById("diary-list").innerHTML += await
-    `<tr class="id" id="${id}"><td id="date">${date.slice(0, 10)}</td><td class="weather" id="weather"><img class="img" src="img/${weather}.png" alt="weather"/></td><td class="text" id="text">${text}</td></tr>`
+  location.reload();
 };
 
 // 日記の自動生成

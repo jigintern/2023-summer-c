@@ -5,7 +5,7 @@ window.onload = async () => {
   let json = await response?.json();
   for (let i=0; i<Object.keys(json).length;i++) {
     document.getElementById("diary-list").innerHTML += await
-    `<tr class="id" id="${json[i]["id"]}"><td id="date">${json[i]["date"].slice(0, 10)}</td><td class="weather" id="weather"><img class="img" src="img/${json[i]["weather"]}.png" alt="weather"/></td><td class="text" id="text">${json[i]["text"]}</td></tr>`
+    `<tr class="id" id="${json[i]["id"]}"><td id="date">${json[i]["date"].slice(0, 10)}</td><td class="weather" id="weather"><figure class="image is-24x24"><img class="img" src="img/${json[i]["weather"]}.png" alt="weather"/></figure></td><td class="text" id="text">${json[i]["text"]}</td></tr>`
   }
 }
 

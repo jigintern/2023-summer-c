@@ -20,20 +20,16 @@ document.getElementById("diary-button").onclick = async() => {
     const response = await fetch("/get-weather?date=" + date)
     weather = await response.text();
   }
-  try {
-    await fetch("/insert-diary",{
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        date: date,
-        weather: weather,
-        text: text,
-      })
-    });
-    window.location.reload();
-  } catch (error) {
-    console.log(error)
-  }
+  await fetch("/insert-diary",{
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      date: date,
+      weather: weather,
+      text: text,
+    })
+  });
+  location.reload();
 };
 
 // 日記の自動生成

@@ -108,7 +108,6 @@ serve(async (req) => {
         for (let i=0;i<word.length;i++)
         question += "- " + word[i] + "\n";
         const response = await fetchChat(question);
-        console.log(response)
         return new Response(response);
     }
 

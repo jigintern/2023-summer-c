@@ -18,6 +18,10 @@ document.getElementById("diary-button").onclick = async() => {
   // 天気の自動入力
   if(weather === "") {
     const response = await fetch("/get-weather?date=" + date)
+    if (response.text() === -1) {
+      window.alert("未来の日記です。天気を入力してください。");
+      return;
+    }
     weather = await response.text();
   }
   const response = await fetch("/insert-diary",{
@@ -36,7 +40,7 @@ document.getElementById("diary-button").onclick = async() => {
 document.getElementById("gpt-button").onclick = async (e) => {
   e.preventDefault();
   const words = document.getElementById("gpt-input").value;
-  const response = await fetch("/gpt",{
+  const response = await fetch("/generate-gpt",{
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({

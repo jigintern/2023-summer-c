@@ -92,6 +92,11 @@ document.getElementById("diary-button").onclick = async(e) => {
 document.getElementById("gpt-button").onclick = async (e) => {
   e.preventDefault();
   const words = document.getElementById("gpt-input").value;
+  // 処理中のグルグル
+  document.getElementById("gpt-button").classList.toggle("is-loading");
+  document.getElementById("ai-img").style.visibility = "hidden";
+
+  // GPTに問い合わせ
   const response = await fetch("/generate-gpt",{
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -100,6 +105,10 @@ document.getElementById("gpt-button").onclick = async (e) => {
     })
   });
   document.getElementById("text-input").innerText = await response.text();
+
+  // グルグルの無効化とAI画像の表示
+  document.getElementById("gpt-button").classList.toggle("is-loading");
+  document.getElementById("ai-img").style.visibility = "visible";
 }
 
 // 日記の削除

@@ -54,7 +54,7 @@
         <label class="label">AIにおまかせ</label>
         <div class="field has-addons">
           <div class="control is-expanded">
-            <input id="gpt-input" class="input is-primary" name="chatgpt" placeholder="ここにたんごをにゅうりょく" row="2"></textarea>
+            <input id="gpt-input" class="input is-primary" name="chatgpt" placeholder="例）夏まつり かき氷" row="2"></textarea>
           </div>
           <div class="control">
             <button id="gpt-button" class="button is-primary">
@@ -70,7 +70,7 @@
         <div class="field">
           <label class="label">にっきをかく</label>
           <div class="control">
-            <textarea id="text-input" class="textarea is-info" name="diary" placeholder="ここににっきをにゅうりょく"
+            <textarea id="text-input" class="textarea is-info" name="diary" placeholder="例）今日は夏まつりに行きました。かき氷がとてもおいしかったです。"
               row="2"></textarea>
           </div>
         </div>
@@ -123,8 +123,15 @@
       </div>
     </div>
   </section>
+  <script type="module">
+    const elem = document.getElementById("date-input");
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = ("00" + (now.getMonth()+1)).slice(-2);
+    const dd = ("00" + (now.getDate())).slice(-2);
+    elem.max = `${yyyy}-${mm}-${dd}`
+  </script>
+  <script type="module" src="script.js"></script>
 </body>
-<script type="module" src="script.js">
-</script>
 
 </html>

@@ -97,7 +97,7 @@ serve(async (req) => {
         mySqlClient.close()
         return new Response("successed");
     }
-    
+
     // 過去の天気をCSVから取得
     // 引数:{date}
     if (req.method === "GET" && pathname === "/get-weather") {
@@ -123,6 +123,7 @@ serve(async (req) => {
         }
     }
 
+    // GPT
     if (req.method === "POST" && pathname === "/generate-gpt")
     {
         const reqJson = await req.json();
@@ -132,7 +133,7 @@ serve(async (req) => {
         for (let i=0;i<word.length;i++)
         question += "- " + word[i] + "\n";
         const response = await fetchChat(question);
-        return new Response(JSON.stringify({ message: response }));
+        return new Response(response);
     }
 
     return serveDir(req, {

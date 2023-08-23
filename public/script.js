@@ -70,16 +70,21 @@ document.getElementById("diary-button").onclick = async(e) => {
     weather = await response.text();
     console.log(weather)
   }
-  await fetch("/insert-diary",{
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      date: date,
-      weather: weather,
-      text: text,
-    })
-  });
-  window.location.reload();
+  try {
+    await fetch("/insert-diary",{
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        date: date,
+        weather: weather,
+        text: text,
+      })
+    });
+    window.location.reload();
+  } catch (error) {
+    window.alert("エラーが発生しました。")
+    console.log(error)
+  }
 };
 
 // 日記の自動生成(GPT)
@@ -101,5 +106,18 @@ document.getElementById("gpt-button").onclick = async (e) => {
 const handleDeleteButtonClick = async(e) => {
   e.preventDefault();
   const id = e.target.parentNode.id;
-  console.log(id)
+  try {
+    await fetch("/delete-diary",{
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id: id
+      })
+    });
+    console.log
+    window.location.reload();
+  } catch (error) {
+    window.alert("エラーが発生しました。")
+    console.log(error)
+  }
 }

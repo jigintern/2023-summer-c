@@ -57,8 +57,8 @@ serve(async (req) => {
         return new Response("successed");
     }
 
-    // 日記の取得
-    // 引数:{date}
+    // すべての日記の取得
+    // 引数:なし
     if (req.method === "GET" && pathname === "/get-diary") {
         const mySqlClient = await new Client().connect({    // データベースと接続
             hostname: MYSQL_HOSTNAME,
@@ -67,7 +67,29 @@ serve(async (req) => {
             db: MYSQL_DBNAME
         })
 
-        const command = await mySqlClient.execute(`SELECT * FROM diary ORDER BY date ASC;`)
+        const command = await mySqlClient.execute(`SELECT * FROM diary ORDER BY date ASC;`);
+
+        // MySQLのDBとの通信を終了する
+        mySqlClient.close();
+        return new Response(JSON.stringify(command.rows));
+    }
+
+    // 特定の日付の日記の取得
+    // 引数:{date}
+    if (req.method === "GET" && pathname === "/get-daydiary") {
+        const reqJson = await req.json();
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+
+        const command = await mySqlClient.execute(`SELECT * FROM diary WHERE ?? = ? ORDER BY date ASC;`,
+        [
+            "date",
+            reqJson.date
+        ]);
 
         // MySQLのDBとの通信を終了する
         mySqlClient.close()
@@ -98,6 +120,50 @@ serve(async (req) => {
         return new Response("successed");
     }
 
+    // 指定した月の中で日記が書かれている日の日付一覧を返す
+    // 引数:{date}
+    if (req.method === "POST" && pathname === "/diary-date")
+    {
+        const reqJson = await req.json();   // 引数を取得
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+        
+        
+        let date = new Date(reqJson.date);
+        date.setHours(date.getHours() + 9);
+        let firstdate = new Date(date.setDate(1));
+        let enddate = new Date(date.setMonth(date.getMonth() + 1));
+        enddate = new Date(enddate.setSeconds(enddate.getSeconds() - 1));
+        
+        const command = await mySqlClient.execute(`SELECT date FROM diary WHERE date >= ? and date <= ? ORDER BY date ASC; `,
+            [
+                firstdate,
+                enddate,
+            ]
+        )
+        
+        mySqlClient.close();
+        const json = command.rows;
+        let datelist = [];
+        let tmp;
+        let tmpdate, tmpmonth, tmpyear;
+        for (let i=0;i<Object.keys(json).length;i++) {
+            tmp = json[i]["date"];
+            tmpyear = tmp.getFullYear().toString();
+            tmpmonth = (tmp.getMonth() + 1).toString();
+            tmpdate = tmp.getDate().toString();
+            datelist.push(tmpyear + '-' + tmpmonth.padStart(2, '0') + '-' + tmpdate.padStart(2, '0'));
+        }
+
+        // MySQLのDBとの通信を終了する
+        
+        return new Response(datelist);
+    }
+
     // 過去の天気をCSVから取得
     // 引数:{date}
     if (req.method === "GET" && pathname === "/get-weather") {
@@ -109,17 +175,22 @@ serve(async (req) => {
         const firstdate = new Date(data[0][0]);
         const requestdate = new Date(param);
         const diffDay = Math.floor((requestdate.getTime() - firstdate.getTime()) / (1000 * 60 * 60 * 24));
-        switch (data[diffDay][1][0]) {
-            case "晴":
-            case "快":
-                return new Response(0);
-            case "曇":
-            case "薄":
-                return new Response(1);
-            case "雨":
-            case "大":
-            case "雪":
-                return new Response(2);
+        try {
+            switch (data[diffDay][1][0]) {
+                case "晴":
+                case "快":
+                    return new Response(0);
+                case "曇":
+                case "薄":
+                    return new Response(1);
+                case "雨":
+                case "大":
+                case "雪":
+                    return new Response(2);
+            }
+        }
+        catch {
+            return new Response(-1);
         }
     }
 
@@ -128,7 +199,6 @@ serve(async (req) => {
     {
         const reqJson = await req.json();
         const word = reqJson.words.split(/\s/);
-        console.log(word);
         let question = message;
         for (let i=0;i<word.length;i++)
         question += "- " + word[i] + "\n";

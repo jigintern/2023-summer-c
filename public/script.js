@@ -16,7 +16,7 @@ window.onload = async () => {
     // 削除ボタンを生成
     const deleteButton = document.createElement("button");
     deleteButton.id = "delete-button-" + id;
-    deleteButton.textContent = "delete";
+    deleteButton.classList.add("delete");
     deleteButton.onclick = handleDeleteButtonClick;
 
     // 日付列を生成

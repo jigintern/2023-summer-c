@@ -26,8 +26,8 @@ window.onload = async () => {
 
     // 日付列を生成
     const dateColumn = document.createElement("td");
-    dateColumn.classList.add("date")
-    dateColumn.textContent = json[i]["date"].slice(0, 10);
+    dateColumn.classList.add("date", "single-line")
+    dateColumn.textContent = json[i]["date"].slice(5, 10);
 
     // 天気列を生成
     const weatherColumn = document.createElement("td");
@@ -69,7 +69,10 @@ document.getElementById("diary-button").onclick = async(e) => {
   if(weather === "") {
     const response = await fetch("/get-weather?date=" + date)
     weather = await response.text();
-    console.log(weather)
+    if(weather === "-1") {
+      window.alert("天気が自動で取得できません。設定してください。")
+      return;
+    }
   }
   try {
     await fetch("/insert-diary",{
@@ -92,6 +95,11 @@ document.getElementById("diary-button").onclick = async(e) => {
 document.getElementById("gpt-button").onclick = async (e) => {
   e.preventDefault();
   const words = document.getElementById("gpt-input").value;
+  // 処理中のグルグル
+  document.getElementById("gpt-button").classList.toggle("is-loading");
+  document.getElementById("ai-img").style.visibility = "hidden";
+
+  // GPTに問い合わせ
   const response = await fetch("/generate-gpt",{
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -100,12 +108,20 @@ document.getElementById("gpt-button").onclick = async (e) => {
     })
   });
   document.getElementById("text-input").innerText = await response.text();
+
+  // グルグルの無効化とAI画像の表示
+  document.getElementById("gpt-button").classList.toggle("is-loading");
+  document.getElementById("ai-img").style.visibility = "visible";
 }
 
 // 日記の削除
 
 const handleDeleteButtonClick = async(e) => {
   e.preventDefault();
+  // 削除の確認
+  if (confirm("削除しますか?") === false) {
+    return;
+  }
   const id = e.target.parentNode.id;
   try {
     await fetch("/delete-diary",{

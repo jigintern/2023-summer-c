@@ -4,7 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
-  <title>にっきアプリ（仮）</title>
+  <title>ぜったいかききれるにっきちょう</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -22,9 +22,11 @@
           <h1 class="title has-text-centered">にっきアプリ</h1>
         </div>
         <div class="column">
-          <figure class="image is-64x64 container">
-            <img src="img/home_icon.png" alt="家">
-          </figure>
+          <a href="calendar.html">
+            <figure class="image is-64x64 container">
+              <img src="img/calendar.png" alt="家">
+            </figure>
+          </a>
         </div>
       </div>
       <form method="post">
@@ -59,7 +61,7 @@
           <div class="control">
             <button id="gpt-button" class="button is-primary">
               <span class="icon">
-                <img src="img/robot.png" alt="AIアイコン" />
+                <img id="ai-img" src="img/robot.png" alt="AIアイコン" />
               </span>
               <span>
                 AI
@@ -90,13 +92,9 @@
         <table class="table is-striped is-fullwidth">
           <thead>
             <tr>
-              <th>
-                <figure class="image is-24x24">
-                  <img src="img/calendar.png" alt="月日" />
-                </figure>
-              </th>
-              <th>天</th>
-              <th>にっき</th>
+              <th></th>
+              <th></th>
+              <th></th>
               <th></th>
             </tr>
           </thead>

@@ -69,7 +69,10 @@ document.getElementById("diary-button").onclick = async(e) => {
   if(weather === "") {
     const response = await fetch("/get-weather?date=" + date)
     weather = await response.text();
-    console.log(weather)
+    if(weather === "-1") {
+      window.alert("天気が自動で取得できません。設定してください。")
+      return;
+    }
   }
   try {
     await fetch("/insert-diary",{

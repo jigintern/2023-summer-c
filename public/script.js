@@ -43,10 +43,10 @@ window.onload = async () => {
     textColumn.textContent = json[i]["text"];
 
     // 列を行に追加
-    row.appendChild(deleteButton);
     row.appendChild(dateColumn);
     row.appendChild(weatherColumn);
     row.appendChild(textColumn);
+    row.appendChild(deleteButton);
 
     // 行をテーブルに追加
     diaryList.appendChild(row);

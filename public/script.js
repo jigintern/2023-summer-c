@@ -21,6 +21,7 @@ window.onload = async () => {
 
     //削除ボタン列を生成
     const deleteButtonColumn = document.createElement("td");
+    deleteButtonColumn.id = id;
     deleteButtonColumn.appendChild(deleteButton);
 
     // 日付列を生成
@@ -114,7 +115,6 @@ const handleDeleteButtonClick = async(e) => {
         id: id
       })
     });
-    console.log
     window.location.reload();
   } catch (error) {
     window.alert("エラーが発生しました。")

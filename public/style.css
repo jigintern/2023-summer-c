@@ -18,7 +18,7 @@ tr td:last-child {
     vertical-align: middle;
 }
 
-tr th:first-child, tr td:first-child { /* 日曜日の列 */
+table#calendar th:first-child, table#calendar td:first-child { /* 日曜日の列 */
     color: red;
 }
 

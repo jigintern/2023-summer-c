@@ -17,3 +17,7 @@ tr td:last-child {
     color: red;
     vertical-align: middle;
   }
+
+tr th:first-child, tr td:first-child {
+    color: red;
+}

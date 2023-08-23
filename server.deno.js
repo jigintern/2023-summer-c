@@ -73,6 +73,31 @@ serve(async (req) => {
         mySqlClient.close()
         return new Response(JSON.stringify(command.rows));
     }
+
+    // 日記を削除
+    // 引数:{id}
+    if (req.method === "POST" && pathname === "/delete-diary")
+    {
+        const reqJson = await req.json();   // 引数を取得
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+        
+        const command = await mySqlClient.execute(`DELETE FROM diary WHERE (?? = ?); `, 
+            [
+            "id",
+            reqJson.id,
+            ]
+        )
+        
+        // MySQLのDBとの通信を終了する
+        mySqlClient.close()
+        return new Response("successed");
+    }
+    
     // 過去の天気をCSVから取得
     // 引数:{date}
     if (req.method === "GET" && pathname === "/get-weather") {

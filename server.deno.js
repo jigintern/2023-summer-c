@@ -175,17 +175,22 @@ serve(async (req) => {
         const firstdate = new Date(data[0][0]);
         const requestdate = new Date(param);
         const diffDay = Math.floor((requestdate.getTime() - firstdate.getTime()) / (1000 * 60 * 60 * 24));
-        switch (data[diffDay][1][0]) {
-            case "晴":
-            case "快":
-                return new Response(0);
-            case "曇":
-            case "薄":
-                return new Response(1);
-            case "雨":
-            case "大":
-            case "雪":
-                return new Response(2);
+        try {
+            switch (data[diffDay][1][0]) {
+                case "晴":
+                case "快":
+                    return new Response(0);
+                case "曇":
+                case "薄":
+                    return new Response(1);
+                case "雨":
+                case "大":
+                case "雪":
+                    return new Response(2);
+            }
+        }
+        catch {
+            return new Response(-1);
         }
     }
 

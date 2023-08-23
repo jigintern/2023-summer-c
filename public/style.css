@@ -16,4 +16,8 @@ tr td:last-child {
     content: " *";
     color: red;
     vertical-align: middle;
-  }
+}
+
+.single-line {
+  white-space: nowrap; /* テキストを1行に制限 */
+}

@@ -26,8 +26,8 @@ window.onload = async () => {
 
     // 日付列を生成
     const dateColumn = document.createElement("td");
-    dateColumn.classList.add("date")
-    dateColumn.textContent = json[i]["date"].slice(0, 10);
+    dateColumn.classList.add("date", "single-line")
+    dateColumn.textContent = json[i]["date"].slice(5, 10);
 
     // 天気列を生成
     const weatherColumn = document.createElement("td");

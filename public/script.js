@@ -50,7 +50,7 @@ window.onload = async () => {
     row.appendChild(dateColumn);
     row.appendChild(weatherColumn);
     row.appendChild(textColumn);
-    row.appendChild(deleteButton);
+    row.appendChild(deleteButtonColumn);
 
     // 行をテーブルに追加
     diaryList.appendChild(row);

@@ -15,7 +15,7 @@
       <div>
         <span id="year"></span>年<span id="month"></span>月
       </div>
-      <table class="table calendar is-bordered is-fullwidth">
+      <table id="calendar" class="table is-bordered is-fullwidth">
         <thead>
           <tr>
             <th>日</th>
@@ -105,7 +105,7 @@
         document.getElementById('year').textContent = date.getFullYear();
         document.getElementById('month').textContent = date.getMonth() + 1;
         // <tbody>要素をHTMLに追加
-        calendar = document.querySelector('table.calendar');
+        calendar = document.getElementById('calendar');
         calendar.replaceChild(createCalendarTbodyElem(date.getFullYear(), date.getMonth()), calendar.lastChild);
     }
 

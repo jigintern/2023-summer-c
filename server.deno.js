@@ -98,6 +98,7 @@ serve(async (req) => {
         }
     }
 
+    // GPT
     if (req.method === "POST" && pathname === "/generate-gpt")
     {
         const reqJson = await req.json();
@@ -107,7 +108,7 @@ serve(async (req) => {
         for (let i=0;i<word.length;i++)
         question += "- " + word[i] + "\n";
         const response = await fetchChat(question);
-        return new Response(JSON.stringify({ message: response }));
+        return new Response(response);
     }
 
     return serveDir(req, {

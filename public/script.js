@@ -115,6 +115,10 @@ document.getElementById("gpt-button").onclick = async (e) => {
 
 const handleDeleteButtonClick = async(e) => {
   e.preventDefault();
+  // 削除の確認
+  if (confirm("削除しますか?") === false) {
+    return;
+  }
   const id = e.target.parentNode.id;
   try {
     await fetch("/delete-diary",{

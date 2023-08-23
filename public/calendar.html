@@ -15,7 +15,7 @@
       <div>
         <span id="year"></span>年<span id="month"></span>月
       </div>
-      <table class="table calendar is-bordered">
+      <table id="calendar" class="table is-bordered is-fullwidth">
         <thead>
           <tr>
             <th>日</th>
@@ -60,7 +60,7 @@
                     attr += 'text-black-50';
                 }
                 if(dateCount.toLocaleDateString() === today.toLocaleDateString()) {
-                    attr += ' table-danger';
+                    attr += ' has-background-danger has-text-white-bis';
                 }
                 td.setAttribute('class', attr);
 
@@ -105,7 +105,7 @@
         document.getElementById('year').textContent = date.getFullYear();
         document.getElementById('month').textContent = date.getMonth() + 1;
         // <tbody>要素をHTMLに追加
-        calendar = document.querySelector('table.calendar');
+        calendar = document.getElementById('calendar');
         calendar.replaceChild(createCalendarTbodyElem(date.getFullYear(), date.getMonth()), calendar.lastChild);
     }
 

@@ -16,8 +16,12 @@ window.onload = async () => {
     // 削除ボタンを生成
     const deleteButton = document.createElement("button");
     deleteButton.id = "delete-button-" + id;
-    deleteButton.textContent = "delete";
+    deleteButton.classList.add("delete");
     deleteButton.onclick = handleDeleteButtonClick;
+
+    //削除ボタン列を生成
+    const deleteButtonColumn = document.createElement("td");
+    deleteButtonColumn.appendChild(deleteButton);
 
     // 日付列を生成
     const dateColumn = document.createElement("td");
@@ -43,10 +47,10 @@ window.onload = async () => {
     textColumn.textContent = json[i]["text"];
 
     // 列を行に追加
-    row.appendChild(deleteButton);
     row.appendChild(dateColumn);
     row.appendChild(weatherColumn);
     row.appendChild(textColumn);
+    row.appendChild(deleteButtonColumn);
 
     // 行をテーブルに追加
     diaryList.appendChild(row);

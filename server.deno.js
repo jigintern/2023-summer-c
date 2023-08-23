@@ -29,6 +29,10 @@ serve(async (req) => {
     const MYSQL_PASSWORD = Deno.env.get("MYSQL_PASSWORD")
     const MYSQL_DBNAME = Deno.env.get("MYSQL_DBNAME")
 
+        /********************************
+        *            Diary              * 
+        ********************************/
+
     // 日記の追加
     // 引数:{date, weather, text}
     if (req.method === "POST" && pathname === "/insert-diary")
@@ -145,8 +149,9 @@ serve(async (req) => {
                 enddate,
             ]
         )
-        
+        // MySQLのDBとの通信を終了する
         mySqlClient.close();
+
         const json = command.rows;
         let datelist = [];
         let tmp;
@@ -159,10 +164,13 @@ serve(async (req) => {
             datelist.push(tmpyear + '-' + tmpmonth.padStart(2, '0') + '-' + tmpdate.padStart(2, '0'));
         }
 
-        // MySQLのDBとの通信を終了する
-        
         return new Response(datelist);
     }
+
+
+        /********************************
+        *            Weather            * 
+        ********************************/
 
     // 過去の天気をCSVから取得
     // 引数:{date}
@@ -194,7 +202,88 @@ serve(async (req) => {
         }
     }
 
-    // GPT
+        /********************************
+        *            Event              * 
+        ********************************/
+
+    // 予定の追加
+    // 引数:{date, name}
+    if (req.method === "POST" && pathname === "/insert-event")
+    {
+        const reqJson = await req.json();   // 引数を取得
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+        
+        const command = await mySqlClient.execute(`INSERT INTO schedule (??, ??) VALUES (?, ?); `, 
+            [
+            "date",
+            "name",
+            new Date(reqJson.date),
+            reqJson.name,
+            ]
+        )
+        
+        // MySQLのDBとの通信を終了する
+        mySqlClient.close()
+        return new Response("successed");
+    }
+
+    // 予定の削除
+    // 引数:{id}
+    if (req.method === "POST" && pathname === "/delete-event")
+    {
+        const reqJson = await req.json();   // 引数を取得
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+        
+        const command = await mySqlClient.execute(`DELETE FROM schedule WHERE (?? = ?);`, 
+            [
+            "id",
+            reqJson.id,
+            ]
+        )
+        
+        // MySQLのDBとの通信を終了する
+        mySqlClient.close()
+        return new Response("successed");
+    }
+
+    // 予定の取得
+    // 引数:{date}
+    if (req.method === "GET" && pathname === "/get-event") {
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+
+        let date = new Date(new URL(req.url).searchParams.get("date"));
+        date.setHours(date.getHours() - 9);
+        console.log(date);
+        const command = await mySqlClient.execute(`SELECT * FROM schedule WHERE date = ? ORDER BY date ASC;`,
+        [
+            date
+        ]);
+
+        // MySQLのDBとの通信を終了する
+        mySqlClient.close();
+        console.log(command.rows);
+        return new Response(JSON.stringify(command.rows));
+    }
+
+        /********************************
+        *           ChatGPT             * 
+        ********************************/
+
     if (req.method === "POST" && pathname === "/generate-gpt")
     {
         const reqJson = await req.json();

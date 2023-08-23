@@ -97,4 +97,5 @@ document.getElementById("gpt-button").onclick = async (e) => {
 const handleDeleteButtonClick = async(e) => {
   e.preventDefault();
   const id = e.target.parentNode.id;
+  console.log(id)
 }

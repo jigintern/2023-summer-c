@@ -19,6 +19,10 @@ window.onload = async () => {
     deleteButton.classList.add("delete");
     deleteButton.onclick = handleDeleteButtonClick;
 
+    //削除ボタン列を生成
+    const deleteButtonColumn = document.createElement("td");
+    deleteButtonColumn.appendChild(deleteButton);
+
     // 日付列を生成
     const dateColumn = document.createElement("td");
     dateColumn.classList.add("date")

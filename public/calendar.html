@@ -73,9 +73,13 @@
             ];
             const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
             dateElem.id = thisDate;
+            // クリックされたときの処理
             dateElem.onclick = async (e) => {
               const id = e.target.id;
-              window.alert(id);
+              document.getElementById('modal-js-example').classList.toggle('is-active');
+              document.getElementById('modal-close').onclick = () => {
+                document.getElementById('modal-js-example').classList.toggle('is-active');
+              };
             };
             td.append(dateElem);
 
@@ -136,5 +140,18 @@
       const date = new Date();
       showCalendar(date);
     </script>
+    <!-- モーダルウィンドウ -->
+    <div id="modal-js-example" class="modal">
+      <div class="modal-background"></div>
+
+      <div class="modal-content">
+        <div class="box">
+          <p>Modal JS example</p>
+          <!-- Your content -->
+        </div>
+      </div>
+
+      <button id="modal-close" class="modal-close is-large" aria-label="close"></button>
+    </div>
   </body>
 </html>

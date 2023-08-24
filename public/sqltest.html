@@ -23,13 +23,13 @@
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          date: "2023-08-31"
+          date: "2023-8-1",
         })
       });
       document.getElementById("server_response").innerText = await response.text();
     };
     document.getElementById("get").onclick = async () => {
-      const response = await fetch("/get-daydiary?date=2023-08-20");
+      const response = await fetch("/get-event?date=2023-08-1");
       console.log(await response.text());
     };
   </script>

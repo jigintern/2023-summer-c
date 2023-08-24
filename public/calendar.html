@@ -47,6 +47,34 @@
         <button id="prevMonthBtn" class="button is-medium">まえの月</button>
         <button id="nextMonthBtn" class="button is-medium">つぎの月</button>
       </div>
+      <form method="post">
+        <div class="columns is-mobile">
+          <div class="column">
+            <div class="field">
+              <label class="label required">ひづけ</label>
+              <div class="control">
+                <input id="date-input" class="input" type="date" required />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">よていをかく</label>
+          <div class="control">
+            <input id="text-input" class="input is-info" name="schedule" placeholder="例）夏祭り"/>
+          </div>
+        </div>
+        <div class="control buttons is-right">
+          <button id="diary-button" class="button is-info">
+            <span class="icon">
+              <img src="img/pencil.png" alt="とうこうアイコン" />
+            </span>
+            <span>
+              とうこう
+            </span>
+          </button>
+        </div>
+      </form>
     </div>
   </section>
   <!-- モーダルウィンドウ -->

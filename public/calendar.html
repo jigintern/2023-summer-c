@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="calendar.css" />
+  <script src="https://kit.fontawesome.com/f55457357a.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -149,6 +150,22 @@
       return result;
     }
 
+    // Dateで指定された月の予定が書かれた日の一覧を取得
+    async function getEventDateList(d) {
+      const date = dateToString(d);
+      const response = await fetch("/event-date", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: date
+        })
+      })
+
+      const tmp = await response.text();
+      const result = tmp.split(',');
+      return result;
+    }
+
     /**
      * カレンダーの曜日列(<thead>要素)の下に挿入する日付行列(<tbody>要素)を返す。
      * @param {Number} year 年
@@ -162,6 +179,8 @@
       const dateCount = new Date(year, month, 1 - (new Date(year, month, 1).getDay()), 9, 0, 0);
       // 日記を書いた日の'yyyy-mm-dd'文字列の配列を取得
       const diaryDateList = await getDiaryDateList(new Date(year, month, 1));
+      // 予定がある日の'yyyy-mm-dd'文字列の配列を取得
+      const eventDateList = await getEventDateList(new Date(year, month, 1));
 
       while (true) {
         // <tr>要素を生成
@@ -180,10 +199,27 @@
           }
           td.setAttribute('class', attr);
 
-          // 日付要素の追加
-          const dateElem = document.createElement('div');
-          dateElem.setAttribute('class', 'has-text-weight-bold');
+          // ---ここから日付&予定マーク要素の追加---
+          const dateIconElem = document.createElement('div');
+          dateIconElem.classList.add('icon-text');
+
+          const dateElem = document.createElement('span');
+          dateElem.classList.add('has-text-weight-bold');
           dateElem.textContent = dateCount.getDate();
+
+          const iconElem = document.createElement('span');
+          iconElem.classList.add('icon', 'is-small');
+
+          const iElem = document.createElement('i')
+          iElem.setAttribute('class', 'fas fa-solid fa-star');
+          iElem.setAttribute('style', 'color: #e7b11d;');
+
+          iconElem.append(iElem);
+          dateIconElem.append(dateElem);
+          if (eventDateList.includes(dateToString(dateCount))){
+            dateIconElem.append(iconElem);
+          }
+          // ---ここまで---
 
           // <td>idに日付を添付
           const [thisYear, thisMonth, thisDay] = [
@@ -212,7 +248,7 @@
               document.getElementById('modal-window').classList.remove('is-active');
             };
           };
-          td.append(dateElem);
+          td.append(dateIconElem);
 
           // スタンプの追加
           if (diaryDateList.includes(dateToString(dateCount))) {

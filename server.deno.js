@@ -334,17 +334,53 @@ serve(async (req) => {
         /********************************
         *           ChatGPT             * 
         ********************************/
-
+    
+    // 単語から日記を生成
+    // 引数:{words}
     if (req.method === "POST" && pathname === "/generate-gpt")
     {
         const reqJson = await req.json();
         const word = reqJson.words.split(/\s/);
         let question = message;
         for (let i=0;i<word.length;i++)
-        question += "- " + word[i] + "\n";
+            question += "- " + word[i] + "\n";
         const response = await fetchChat(question);
         return new Response(response);
     }
+
+    // 予定から日記を生成
+    // 引数:{date}
+    if (req.method === "POST" && pathname === "/event-gpt")
+    {
+        const reqJson = await req.json();
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+
+        let [year, month, date] = reqJson.date.split('-');
+        month = month.padStart(2, '0');
+        date = date.padStart(2, '0');
+        const day = year + '-' + month + '-' + date;
+
+        const command = await mySqlClient.execute(`SELECT * FROM schedule WHERE date = ? ORDER BY date ASC;`,
+        [
+            day
+        ]);
+
+        console.log(command.rows);
+        // MySQLのDBとの通信を終了する
+        mySqlClient.close();
+
+        let question = message;
+        for (let i=0;i<Object.keys(command.rows).length;i++)
+            question += "- " + command.rows[i]["name"] + '\n';
+        console.log(question);
+        const response = await fetchChat(question);
+        return new Response(response);
+    } 
 
     return serveDir(req, {
         fsRoot: "public",

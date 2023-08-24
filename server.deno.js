@@ -81,7 +81,7 @@ serve(async (req) => {
     // 特定の日付の日記の取得
     // 引数:{date}
     if (req.method === "GET" && pathname === "/get-daydiary") {
-        const date = new URL(req.url).searchParams.get("date");
+        let date = new URL(req.url).searchParams.get("date");
         const mySqlClient = await new Client().connect({    // データベースと接続
             hostname: MYSQL_HOSTNAME,
             username: MYSQL_USER,
@@ -89,6 +89,9 @@ serve(async (req) => {
             db: MYSQL_DBNAME
         })
 
+        date = new Date(date);
+        date.setHours(date.getHours() - 9);
+        console.log(date);
 
         const command = await mySqlClient.execute(`SELECT * FROM diary WHERE ?? = ? ORDER BY date ASC;`,
         [
@@ -98,7 +101,12 @@ serve(async (req) => {
 
         // MySQLのDBとの通信を終了する
         mySqlClient.close()
-        return new Response(JSON.stringify(command.rows));
+        console.log(Object.keys(command.rows).length);
+        if (Object.keys(command.rows).length == 0) {
+            return new Response("-1")
+        } else {
+            return new Response(command.rows[0]["text"]);
+        }
     }
 
     // 日記を削除

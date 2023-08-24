@@ -7,30 +7,29 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
-    <body>
-      <section class="section">
-        <div>
-          <div class="columns is-mobile is-gapless is-centered is-vcentered">
-            <div class="column">
+  <body>
+    <section class="section">
+      <div>
+        <div class="columns is-mobile is-gapless is-centered is-vcentered">
+          <div class="column">
+            <figure class="image is-64x64 container">
+              <img src="img/bell.png" alt="ベル" />
+            </figure>
+          </div>
+          <div class="column is-8">
+            <h1 class="title has-text-centered">にっきアプリ</h1>
+          </div>
+          <div class="column">
+            <a href="index.html">
               <figure class="image is-64x64 container">
-                <img src="img/bell.png" alt="ベル">
+                <img src="img/pencil.png" alt="鉛筆" />
               </figure>
-            </div>
-            <div class="column is-8">
-              <h1 class="title has-text-centered">にっきアプリ</h1>
-            </div>
-            <div class="column">
-              <a href="index.html">
-                <figure class="image is-64x64 container">
-                  <img src="img/pencil.png" alt="鉛筆">
-                </figure>
-              </a>
+            </a>
           </div>
         </div>
       </div>
       <div class="container">
-      <div>
-        <span id="year"></span>年<span id="month"></span>月</div>
+        <div><span id="year"></span>年<span id="month"></span>月</div>
         <table id="calendar" class="table is-bordered is-fullwidth">
           <thead>
             <tr>
@@ -47,8 +46,22 @@
         <button id="prevMonthBtn" class="button">prev</button>
         <button id="nextMonthBtn" class="button">next</button>
       </div>
-  </section>
-  <script>
+    </section>
+    <!-- モーダルウィンドウ -->
+    <div id="modal">
+      <div id="modal-window" class="modal">
+        <div class="modal-background" id="modal-background"></div>
+        <div class="modal-content">
+          <div class="box">
+            <h4 class="title is-4">この日のにっき</h4>
+            <div id="diary"></div>
+          </div>
+        </div>
+        <button id="modal-close" class="modal-close is-large" aria-label="close"></button>
+      </div>
+    </div>
+    <!-- ここまでモーダルウィンドウ -->
+    <script>
     // Dateを文字列'yyyy-mm-dd'に変換
     function dateToString(date){
         y = date.getFullYear();
@@ -119,9 +132,24 @@
             ];
             const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
             dateElem.id = thisDate;
+            // クリックされたときの処理
             dateElem.onclick = async (e) => {
               const id = e.target.id;
-              window.alert(id);
+              // 挿入する日記を取得&エレメントの作成
+              const response = await fetch('/get-daydiary?date=' + id);
+              let diary = await response.text();
+              if (diary === '-1') {
+                diary = 'この日ににっきはありません。';
+              }
+              document.getElementById('diary').innerHTML = `<p>${diary}<p>`;
+              // モーダルウィンドウ
+              document.getElementById('modal-window').classList.add('is-active');
+              document.getElementById('modal-close').onclick = () => {
+                document.getElementById('modal-window').classList.remove('is-active');
+              };
+              document.getElementById('modal-background').onclick = () => {
+                document.getElementById('modal-window').classList.remove('is-active');
+              };
             };
             td.append(dateElem);
 

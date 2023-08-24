@@ -86,7 +86,6 @@ document.getElementById("diary-button").onclick = async(e) => {
     });
     window.location.reload();
   } catch (error) {
-    window.alert("エラーが発生しました。")
     console.log(error)
   }
 };
@@ -133,7 +132,6 @@ const handleDeleteButtonClick = async(e) => {
     });
     window.location.reload();
   } catch (error) {
-    window.alert("エラーが発生しました。")
     console.log(error)
   }
 }

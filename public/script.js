@@ -100,7 +100,7 @@ document.getElementById("event-to-diary-button").onclick = async(e) => {
     return;
   }
   document.getElementById("event-to-diary-button").classList.add("is-loading"); // グルグル
-  await fetch("/event-gpt", {
+  const response = await fetch("/event-gpt", {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
@@ -109,7 +109,7 @@ document.getElementById("event-to-diary-button").onclick = async(e) => {
   });
   document.getElementById("text-input").innerText = await response.text();
 
-  document.getElementById("gpt-button").classList.remove("is-loading"); // グルグル無効化
+  document.getElementById("event-to-diary-button").classList.remove("is-loading"); // グルグル無効化
 }
 
 // 日記の自動生成(GPT)

@@ -52,19 +52,45 @@
     </div>
   </section>
   <script>
+    // Dateを文字列'yyyy-mm-dd'に変換
+    function dateToString(date){
+        y = date.getFullYear();
+        m = ('00' + (date.getMonth() + 1)).slice(-2);
+        d = ('00' + date.getDate()).slice(-2);
+        return `${y}-${m}-${d}`;
+    }
+
+    // Dateで指定された月の日記が書かれた日の一覧を取得
+    async function getDiaryDateList(d){
+      const date = dateToString(d);
+      const response = await fetch("/diary-date", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            date: date
+        })
+      })
+
+      const tmp = await response.text();
+      const result = tmp.split(',');
+      return result;
+    }
+
     /**
      * カレンダーの曜日列(<thead>要素)の下に挿入する日付行列(<tbody>要素)を返す。
      * @param {Number} year 年
      * @param {Number} month 月
      * @returns {HTMLTableSectionElement} カレンダーの内容が書かれた<tbody>要素。
      */
-    function createCalendarTbodyElem(year, month){
+    async function createCalendarTbodyElem(year, month){
         const tbody = document.createElement('tbody');
         const today = new Date();
         // 祝日の配列を取得
         // const holidays = holiday_jp.between(new Date(year, month-1, 1), new Date(year, month+1, 31));
         // カレンダーの1行1列目の日に該当するDateオブジェクトを生成
         const dateCount = new Date(year, month, 1-(new Date(year, month, 1).getDay()), 9, 0, 0);
+        // 日記を書いた日の'yyyy-mm-dd'文字列の配列を取得
+        const diaryDateList = await getDiaryDateList(new Date(year, month, 1));
 
         while(true) {
             // <tr>要素を生成
@@ -88,6 +114,14 @@
                 dateElem.setAttribute('class', 'fw-bold')
                 dateElem.textContent = dateCount.getDate();
                 td.append(dateElem);
+
+                // スタンプの追加
+                if(diaryDateList.includes(dateToString(dateCount))) {
+                  const stampElem = document.createElement('img');
+                  stampElem.setAttribute('src', 'img/hanamaru.png');
+                  stampElem.setAttribute('alt', 'はなまるスタンプ');
+                  td.append(stampElem);
+                }
 
                 // // 祝日の追加
                 // const holidayElem = document.createElement('div');
@@ -119,13 +153,15 @@
      * dateが存在する月のカレンダーをHTMLで表示する。
      * @param {Date} date 表示したい月のDateオブジェクト
      */
-    function showCalendar(date){
+    async function showCalendar(date){
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
         // 年月をHTMLに書き込み
-        document.getElementById('year').textContent = date.getFullYear();
-        document.getElementById('month').textContent = date.getMonth() + 1;
+        document.getElementById('year').textContent = year;
+        document.getElementById('month').textContent = month;
         // <tbody>要素をHTMLに追加
         calendar = document.getElementById('calendar');
-        calendar.replaceChild(createCalendarTbodyElem(date.getFullYear(), date.getMonth()), calendar.lastChild);
+        calendar.replaceChild(await createCalendarTbodyElem(date.getFullYear(), date.getMonth()), calendar.lastChild);
     }
 
     const prevMonthBtn = document.getElementById('prevMonthBtn');

@@ -59,13 +59,13 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">よていをかく</label>
+          <label class="label required">よていをかく</label>
           <div class="control">
-            <input id="text-input" class="input is-info" name="schedule" placeholder="例）夏祭り"/>
+            <input id="schedule-input" class="input is-info" name="schedule" placeholder="例）夏祭り" required/>
           </div>
         </div>
         <div class="control buttons is-right">
-          <button id="diary-button" class="button is-info">
+          <button id="schedule-button" class="button is-info">
             <span class="icon">
               <img src="img/pencil.png" alt="とうこうアイコン" />
             </span>
@@ -237,6 +237,36 @@
 
     const date = new Date();
     showCalendar(date);
+
+    document.getElementById("schedule-button").onclick = async (e) => {
+      e.preventDefault();
+      const schedule = document.getElementById("schedule-input").value;
+      const date = document.getElementById("date-input").value;
+
+      if(date === "") {
+      window.alert("ひづけをにゅうりょくしてね！");
+      return;
+      }
+
+      if(schedule === "") {
+      window.alert("よていをかいてね！")
+      return;
+      }
+
+      try {
+        await fetch("/insert-event",{
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            date: date,
+            name: schedule,
+          })
+        });
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
+    }
   </script>
 </body>
 

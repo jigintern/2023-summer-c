@@ -84,6 +84,13 @@ document.getElementById("diary-button").onclick = async(e) => {
       return;
     }
   }
+  
+  const response = await fetch("/get-daydiary?date=" + date)
+  if(await response.text() !== "-1"){
+    window.alert("その日はにっきがかいてあるよ！");
+    return;
+  }
+
   try {
     await fetch("/insert-diary",{
       method: 'POST',

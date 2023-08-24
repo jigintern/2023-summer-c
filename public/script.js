@@ -65,15 +65,32 @@ document.getElementById("diary-button").onclick = async(e) => {
   const date = document.getElementById("date-input").value;
   let weather = document.getElementById("weather-input").value;
 
+  if(date === "") {
+    window.alert("ひづけをにゅうりょくしてね！");
+    return;
+  }
+
+  if(text === "") {
+    window.alert("にっきをかいてね！")
+    return;
+  }
+
   // 天気の自動入力
   if(weather === "") {
     const response = await fetch("/get-weather?date=" + date)
     weather = await response.text();
     if(weather === "-1") {
-      window.alert("天気が自動で取得できません。設定してください。")
+      window.alert("天気がわからないよ。せっていしてね。")
       return;
     }
   }
+  
+  const response = await fetch("/get-daydiary?date=" + date)
+  if(await response.text() !== "-1"){
+    window.alert("その日はにっきがかいてあるよ！");
+    return;
+  }
+
   try {
     await fetch("/insert-diary",{
       method: 'POST',
@@ -86,17 +103,38 @@ document.getElementById("diary-button").onclick = async(e) => {
     });
     window.location.reload();
   } catch (error) {
-    window.alert("エラーが発生しました。")
     console.log(error)
   }
 };
+
+// 予定から日記の自動生成
+document.getElementById("event-to-diary-button").onclick = async(e) => {
+  e.preventDefault()
+  const date = document.getElementById("date-input").value;
+
+  if(date === "") {
+    window.alert("ひづけをにゅうりょくしてね");
+    return;
+  }
+  document.getElementById("event-to-diary-button").classList.add("is-loading"); // グルグル
+  const response = await fetch("/event-gpt", {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      date: date
+    })
+  });
+  document.getElementById("text-input").innerText = await response.text();
+
+  document.getElementById("event-to-diary-button").classList.remove("is-loading"); // グルグル無効化
+}
 
 // 日記の自動生成(GPT)
 document.getElementById("gpt-button").onclick = async (e) => {
   e.preventDefault();
   const words = document.getElementById("gpt-input").value;
   // 処理中のグルグル
-  document.getElementById("gpt-button").classList.toggle("is-loading");
+  document.getElementById("gpt-button").classList.add("is-loading");
   document.getElementById("ai-img").style.visibility = "hidden";
 
   // GPTに問い合わせ
@@ -110,7 +148,7 @@ document.getElementById("gpt-button").onclick = async (e) => {
   document.getElementById("text-input").innerText = await response.text();
 
   // グルグルの無効化とAI画像の表示
-  document.getElementById("gpt-button").classList.toggle("is-loading");
+  document.getElementById("gpt-button").classList.remove("is-loading");
   document.getElementById("ai-img").style.visibility = "visible";
 }
 
@@ -119,7 +157,7 @@ document.getElementById("gpt-button").onclick = async (e) => {
 const handleDeleteButtonClick = async(e) => {
   e.preventDefault();
   // 削除の確認
-  if (confirm("削除しますか?") === false) {
+  if (confirm("けしますか？") === false) {
     return;
   }
   const id = e.target.parentNode.id;
@@ -133,7 +171,6 @@ const handleDeleteButtonClick = async(e) => {
     });
     window.location.reload();
   } catch (error) {
-    window.alert("エラーが発生しました。")
     console.log(error)
   }
 }

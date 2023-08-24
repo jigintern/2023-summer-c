@@ -19,17 +19,17 @@
     const today = '2023/08/31';
     document.getElementById("auth").onclick = async () => {
       const pass = document.getElementById("password").value;
-      const response = await fetch("/event-date",{
+      const response = await fetch("/event-gpt",{
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          date: "2023-08-31"
+          date: "2023-8-5",
         })
       });
       document.getElementById("server_response").innerText = await response.text();
     };
     document.getElementById("get").onclick = async () => {
-      const response = await fetch("/get-daydiary?date=2023-08-20");
+      const response = await fetch("/get-event?date=2023-08-1");
       console.log(await response.text());
     };
   </script>

@@ -97,8 +97,6 @@
     async function createCalendarTbodyElem(year, month) {
       const tbody = document.createElement('tbody');
       const today = new Date();
-      // 祝日の配列を取得
-      // const holidays = holiday_jp.between(new Date(year, month-1, 1), new Date(year, month+1, 31));
       // カレンダーの1行1列目の日に該当するDateオブジェクトを生成
       const dateCount = new Date(year, month, 1 - (new Date(year, month, 1).getDay()), 9, 0, 0);
       // 日記を書いた日の'yyyy-mm-dd'文字列の配列を取得
@@ -163,17 +161,6 @@
             stampElem.classList.add('image', 'is-24x24')
             td.append(stampElem);
           }
-
-          // // 祝日の追加
-          // const holidayElem = document.createElement('div');
-          // // ライブラリから祝日を取得
-          // holidays.forEach(obj => {
-          //     if(obj.date.getTime() === dateCount.getTime()) {
-          //         holidayElem.setAttribute('class', 'holiday bg-success text-white');
-          //         holidayElem.textContent = obj.name;
-          //     }
-          // });
-          // td.append(holidayElem);
 
           // <tr>要素の配下に<td>要素を追加
           tr.append(td);

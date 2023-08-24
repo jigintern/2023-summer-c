@@ -65,15 +65,32 @@ document.getElementById("diary-button").onclick = async(e) => {
   const date = document.getElementById("date-input").value;
   let weather = document.getElementById("weather-input").value;
 
+  if(date === "") {
+    window.alert("ひづけをにゅうりょくしてね！");
+    return;
+  }
+
+  if(text === "") {
+    window.alert("にっきをかいてね！")
+    return;
+  }
+
   // 天気の自動入力
   if(weather === "") {
     const response = await fetch("/get-weather?date=" + date)
     weather = await response.text();
     if(weather === "-1") {
-      window.alert("天気が自動で取得できません。設定してください。")
+      window.alert("天気がわからないよ。せっていしてね。")
       return;
     }
   }
+  
+  const response = await fetch("/get-daydiary?date=" + date)
+  if(await response.text() !== "-1"){
+    window.alert("その日はにっきがかいてあるよ！");
+    return;
+  }
+
   try {
     await fetch("/insert-diary",{
       method: 'POST',
@@ -140,7 +157,7 @@ document.getElementById("gpt-button").onclick = async (e) => {
 const handleDeleteButtonClick = async(e) => {
   e.preventDefault();
   // 削除の確認
-  if (confirm("削除しますか?") === false) {
+  if (confirm("けしますか？") === false) {
     return;
   }
   const id = e.target.parentNode.id;

@@ -53,7 +53,7 @@
         <div class="modal-background"></div>
         <div class="modal-content">
           <div class="box">
-            <h3>この日のにっき</h3>
+            <h4 class="title is-4">この日のにっき</h4>
             <div id="diary"></div>
           </div>
         </div>
@@ -110,9 +110,9 @@
               const id = e.target.id;
               // 挿入する日記を取得&エレメントの作成
               const response = await fetch('/get-daydiary?date=' + id);
-              let diary = response.text();
+              let diary = await response.text();
               if (diary === '-1') {
-                diary = 'この日によていはありません。';
+                diary = 'この日ににっきはありません。';
               }
               document.getElementById('diary').innerHTML = `<p>${diary}<p>`;
               // モーダルウィンドウ

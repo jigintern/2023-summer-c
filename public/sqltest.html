@@ -29,7 +29,7 @@
       document.getElementById("server_response").innerText = await response.text();
     };
     document.getElementById("get").onclick = async () => {
-      const response = await fetch("/get-event?date=2023-08-31");
+      const response = await fetch("/get-daydiary?date=2023-08-20");
       console.log(await response.text());
     };
   </script>

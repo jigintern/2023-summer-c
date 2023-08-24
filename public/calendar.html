@@ -11,7 +11,7 @@
 
 <body>
   <section class="section">
-    <div>
+    <div cclass="container">
       <div class="columns is-mobile is-gapless is-centered is-vcentered">
         <div class="column">
           <figure class="image is-64x64 container">
@@ -29,8 +29,6 @@
           </a>
         </div>
       </div>
-    </div>
-    <div class="container">
       <div><span id="year"></span>年<span id="month"></span>月</div>
       <table id="calendar" class="table is-bordered is-fullwidth">
         <thead>
@@ -45,8 +43,10 @@
           </tr>
         </thead>
       </table>
-      <button id="prevMonthBtn" class="button">prev</button>
-      <button id="nextMonthBtn" class="button">next</button>
+      <div class="buttons has-addons is-centered">
+        <button id="prevMonthBtn" class="button is-medium">まえの月</button>
+        <button id="nextMonthBtn" class="button is-medium">つぎの月</button>
+      </div>
     </div>
   </section>
   <!-- モーダルウィンドウ -->

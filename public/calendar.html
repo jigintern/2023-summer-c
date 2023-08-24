@@ -112,16 +112,16 @@
           // class属性の設定
           let attr = '';
           if (dateCount.getMonth() !== month) {
-            attr += 'text-black-50';
+            attr += 'has-text-grey-light';
           }
           if (dateCount.toLocaleDateString() === today.toLocaleDateString()) {
-            attr += ' has-background-danger has-text-white-bis';
+            attr += ' has-background-warning';
           }
           td.setAttribute('class', attr);
 
           // 日付要素の追加
           const dateElem = document.createElement('div');
-          dateElem.setAttribute('class', 'fw-bold');
+          dateElem.setAttribute('class', 'has-text-weight-bold');
           dateElem.textContent = dateCount.getDate();
 
           // <td>idに日付を添付

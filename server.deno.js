@@ -44,21 +44,41 @@ serve(async (req) => {
             password: MYSQL_PASSWORD,
             db: MYSQL_DBNAME
         })
+
+        let date = new Date(reqJson.date);
+        date.setHours(date.getHours() + 9);
         
-        const command = await mySqlClient.execute(`INSERT INTO diary (??, ??, ??) VALUES (?, ?, ?); `, 
+        const check = await mySqlClient.execute(`SELECT * FROM diary WHERE ?? = ? ORDER BY date ASC; `, 
             [
             "date",
-            "weather",
-            "text",
-            new Date(reqJson.date),
-            reqJson.weather,
-            reqJson.text,
+            date
             ]
         )
+        console.log(reqJson.date);
         
-        // MySQLのDBとの通信を終了する
-        mySqlClient.close()
-        return new Response("successed");
+        console.log(check.rows)
+        console.log(Object.keys(check.rows).length);
+        if (Object.keys(check.rows).length != 0) {
+            console.log("日記かぶってます");
+            // MySQLのDBとの通信を終了する
+            mySqlClient.close();
+            return new Response("-1");
+        } else {
+            console.log("追加しました")
+            const command = await mySqlClient.execute(`INSERT INTO diary (??, ??, ??) VALUES (?, ?, ?); `, 
+                [
+                "date",
+                "weather",
+                "text",
+                new Date(reqJson.date),
+                reqJson.weather,
+                reqJson.text,
+                ]
+            )
+                // MySQLのDBとの通信を終了する
+                mySqlClient.close()
+                return new Response("successed");
+        }
     }
 
     // すべての日記の取得

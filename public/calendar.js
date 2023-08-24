@@ -10,5 +10,5 @@ window.onload = async () => {
         })
     })
 
-    console.log(response)
+    console.log(response.text()[0]);
 }

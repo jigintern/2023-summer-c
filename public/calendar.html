@@ -31,6 +31,11 @@
       <button id="prevMonthBtn" class="button">prev</button>
       <button id="nextMonthBtn" class="button">next</button>
     </div>
+    <div>
+      <button id="addEventBtn" class="button">予定を追加</button>
+      <textarea id="name-input" class="text"></textarea>
+      <input id="date-input" class="input" type="date" />
+    </div>
   </section>
   <script>
     /**
@@ -120,6 +125,25 @@
         date.setMonth(date.getMonth() + 1);
         showCalendar(date);
     })
+
+    document.getElementById("addEventBtn").onclick = async (e) => {
+      const name = document.getElementById("name-input").value;
+      const date = document.getElementById("date-input").value;
+      try {
+        await fetch("/insert-event",{
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            date: date,
+            name: name,
+          })
+        });
+        window.location.reload();
+      } catch (error) {
+        window.alert("エラーが発生しました。")
+        console.log(error)
+      }
+    }
 
     const date = new Date();
     showCalendar(date);

@@ -269,8 +269,8 @@ serve(async (req) => {
         return new Response("successed");
     }
 
-    // 予定の取得
-    // 引数:{date}
+    // すべての予定の取得
+    // 引数:なし
     if (req.method === "GET" && pathname === "/get-event") {
         const mySqlClient = await new Client().connect({    // データベースと接続
             hostname: MYSQL_HOSTNAME,
@@ -279,15 +279,7 @@ serve(async (req) => {
             db: MYSQL_DBNAME
         })
 
-        let [year, month, date] = new URL(req.url).searchParams.get("date").split('-');
-        month = month.padStart(2, '0');
-        date = date.padStart(2, '0');
-        const day = year + '-' + month + '-' + date;
-
-        const command = await mySqlClient.execute(`SELECT * FROM schedule WHERE date = ? ORDER BY date ASC;`,
-        [
-            day
-        ]);
+        const command = await mySqlClient.execute(`SELECT * FROM schedule ORDER BY date ASC;`);
 
         // MySQLのDBとの通信を終了する
         mySqlClient.close();

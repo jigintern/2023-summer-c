@@ -81,7 +81,7 @@ serve(async (req) => {
     // 特定の日付の日記の取得
     // 引数:{date}
     if (req.method === "GET" && pathname === "/get-daydiary") {
-        const reqJson = await req.json();
+        const date = new URL(req.url).searchParams.get("date");
         const mySqlClient = await new Client().connect({    // データベースと接続
             hostname: MYSQL_HOSTNAME,
             username: MYSQL_USER,
@@ -89,10 +89,11 @@ serve(async (req) => {
             db: MYSQL_DBNAME
         })
 
+
         const command = await mySqlClient.execute(`SELECT * FROM diary WHERE ?? = ? ORDER BY date ASC;`,
         [
             "date",
-            reqJson.date
+            date,
         ]);
 
         // MySQLのDBとの通信を終了する

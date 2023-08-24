@@ -50,20 +50,28 @@ serve(async (req) => {
         date = date.padStart(2, '0');
         const day = year + '-' + month + '-' + date;
 
-        const command = await mySqlClient.execute(`INSERT INTO diary (??, ??, ??) VALUES (?, ?, ?); `, 
-            [
+        const check = await mySqlClient.execute(`SELECT * FROM diary WHERE ?? = ? ORDER BY date ASC;`,
+        [
             "date",
-            "weather",
-            "text",
             day,
-            reqJson.weather,
-            reqJson.text,
-            ]
-        )
-        
-        // MySQLのDBとの通信を終了する
-        mySqlClient.close()
-        return new Response("successed");
+        ]);
+
+        if (Object.keys(check.rows).length != 0) {
+            mySqlClient.close();
+            return new Response("-1");
+        } else {
+            const command = await mySqlClient.execute(`INSERT INTO diary (??, ??, ??) VALUES (?, ?, ?); `, 
+               [
+                "date",
+                "weather",
+                "text",
+                day,
+                reqJson.weather,
+                reqJson.text,
+                ]
+            )
+            return new Response("successed");
+        }
     }
 
     // すべての日記の取得

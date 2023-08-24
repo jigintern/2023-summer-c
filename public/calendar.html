@@ -1,83 +1,85 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta charset="utf-8" />
-    <title>カレンダー | ぜったいかききれるにっきちょう</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <section class="section">
-      <div>
-        <div class="columns is-mobile is-gapless is-centered is-vcentered">
-          <div class="column">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <title>カレンダー | ぜったいかききれるにっきちょう</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <section class="section">
+    <div>
+      <div class="columns is-mobile is-gapless is-centered is-vcentered">
+        <div class="column">
+          <figure class="image is-64x64 container">
+            <img src="img/bell.png" alt="ベル" />
+          </figure>
+        </div>
+        <div class="column is-8">
+          <h1 class="title has-text-centered">にっきアプリ</h1>
+        </div>
+        <div class="column">
+          <a href="index.html">
             <figure class="image is-64x64 container">
-              <img src="img/bell.png" alt="ベル" />
+              <img src="img/pencil.png" alt="鉛筆" />
             </figure>
-          </div>
-          <div class="column is-8">
-            <h1 class="title has-text-centered">にっきアプリ</h1>
-          </div>
-          <div class="column">
-            <a href="index.html">
-              <figure class="image is-64x64 container">
-                <img src="img/pencil.png" alt="鉛筆" />
-              </figure>
-            </a>
-          </div>
+          </a>
         </div>
-      </div>
-      <div class="container">
-        <div><span id="year"></span>年<span id="month"></span>月</div>
-        <table id="calendar" class="table is-bordered is-fullwidth">
-          <thead>
-            <tr>
-              <th>日</th>
-              <th>月</th>
-              <th>火</th>
-              <th>水</th>
-              <th>木</th>
-              <th>金</th>
-              <th>土</th>
-            </tr>
-          </thead>
-        </table>
-        <button id="prevMonthBtn" class="button">prev</button>
-        <button id="nextMonthBtn" class="button">next</button>
-      </div>
-    </section>
-    <!-- モーダルウィンドウ -->
-    <div id="modal">
-      <div id="modal-window" class="modal">
-        <div class="modal-background" id="modal-background"></div>
-        <div class="modal-content">
-          <div class="box">
-            <h4 class="title is-4">この日のにっき</h4>
-            <div id="diary"></div>
-          </div>
-        </div>
-        <button id="modal-close" class="modal-close is-large" aria-label="close"></button>
       </div>
     </div>
-    <!-- ここまでモーダルウィンドウ -->
-    <script>
+    <div class="container">
+      <div><span id="year"></span>年<span id="month"></span>月</div>
+      <table id="calendar" class="table is-bordered is-fullwidth">
+        <thead>
+          <tr>
+            <th>日</th>
+            <th>月</th>
+            <th>火</th>
+            <th>水</th>
+            <th>木</th>
+            <th>金</th>
+            <th>土</th>
+          </tr>
+        </thead>
+      </table>
+      <button id="prevMonthBtn" class="button">prev</button>
+      <button id="nextMonthBtn" class="button">next</button>
+    </div>
+  </section>
+  <!-- モーダルウィンドウ -->
+  <div id="modal">
+    <div id="modal-window" class="modal">
+      <div class="modal-background" id="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <h4 class="title is-4">この日のにっき</h4>
+          <div id="diary"></div>
+        </div>
+      </div>
+      <button id="modal-close" class="modal-close is-large" aria-label="close"></button>
+    </div>
+  </div>
+  <!-- ここまでモーダルウィンドウ -->
+  <script>
     // Dateを文字列'yyyy-mm-dd'に変換
-    function dateToString(date){
-        y = date.getFullYear();
-        m = ('00' + (date.getMonth() + 1)).slice(-2);
-        d = ('00' + date.getDate()).slice(-2);
-        return `${y}-${m}-${d}`;
+    function dateToString(date) {
+      y = date.getFullYear();
+      m = ('00' + (date.getMonth() + 1)).slice(-2);
+      d = ('00' + date.getDate()).slice(-2);
+      return `${y}-${m}-${d}`;
     }
 
     // Dateで指定された月の日記が書かれた日の一覧を取得
-    async function getDiaryDateList(d){
+    async function getDiaryDateList(d) {
       const date = dateToString(d);
       const response = await fetch("/diary-date", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            date: date
+          date: date
         })
       })
 
@@ -92,134 +94,135 @@
      * @param {Number} month 月
      * @returns {HTMLTableSectionElement} カレンダーの内容が書かれた<tbody>要素。
      */
-    async function createCalendarTbodyElem(year, month){
-        const tbody = document.createElement('tbody');
-        const today = new Date();
-        // 祝日の配列を取得
-        // const holidays = holiday_jp.between(new Date(year, month-1, 1), new Date(year, month+1, 31));
-        // カレンダーの1行1列目の日に該当するDateオブジェクトを生成
-        const dateCount = new Date(year, month, 1-(new Date(year, month, 1).getDay()), 9, 0, 0);
-        // 日記を書いた日の'yyyy-mm-dd'文字列の配列を取得
-        const diaryDateList = await getDiaryDateList(new Date(year, month, 1));
+    async function createCalendarTbodyElem(year, month) {
+      const tbody = document.createElement('tbody');
+      const today = new Date();
+      // 祝日の配列を取得
+      // const holidays = holiday_jp.between(new Date(year, month-1, 1), new Date(year, month+1, 31));
+      // カレンダーの1行1列目の日に該当するDateオブジェクトを生成
+      const dateCount = new Date(year, month, 1 - (new Date(year, month, 1).getDay()), 9, 0, 0);
+      // 日記を書いた日の'yyyy-mm-dd'文字列の配列を取得
+      const diaryDateList = await getDiaryDateList(new Date(year, month, 1));
 
-        while (true) {
-          // <tr>要素を生成
-          const tr = document.createElement('tr');
+      while (true) {
+        // <tr>要素を生成
+        const tr = document.createElement('tr');
 
-          for (let i = 0; i < 7; i++) {
-            // <td>要素を生成
-            const td = document.createElement('td');
-            // class属性の設定
-            let attr = '';
-            if (dateCount.getMonth() !== month) {
-              attr += 'text-black-50';
-            }
-            if (dateCount.toLocaleDateString() === today.toLocaleDateString()) {
-              attr += ' has-background-danger has-text-white-bis';
-            }
-            td.setAttribute('class', attr);
-
-            // 日付要素の追加
-            const dateElem = document.createElement('div');
-            dateElem.setAttribute('class', 'fw-bold');
-            dateElem.textContent = dateCount.getDate();
-
-            // <td>idに日付を添付
-            const [thisYear, thisMonth, thisDay] = [
-              dateCount.getFullYear(),
-              dateCount.getMonth() + 1,
-              dateCount.getDate(),
-            ];
-            const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
-            dateElem.id = thisDate;
-            // クリックされたときの処理
-            dateElem.onclick = async (e) => {
-              const id = e.target.id;
-              // 挿入する日記を取得&エレメントの作成
-              const response = await fetch('/get-daydiary?date=' + id);
-              let diary = await response.text();
-              if (diary === '-1') {
-                diary = 'この日ににっきはありません。';
-              }
-              document.getElementById('diary').innerHTML = `<p>${diary}<p>`;
-              // モーダルウィンドウ
-              document.getElementById('modal-window').classList.add('is-active');
-              document.getElementById('modal-close').onclick = () => {
-                document.getElementById('modal-window').classList.remove('is-active');
-              };
-              document.getElementById('modal-background').onclick = () => {
-                document.getElementById('modal-window').classList.remove('is-active');
-              };
-            };
-            td.append(dateElem);
-
-            // スタンプの追加
-            if(diaryDateList.includes(dateToString(dateCount))) {
-                  const stampElem = document.createElement('img');
-                  stampElem.setAttribute('src', 'img/hanamaru.png');
-                  stampElem.setAttribute('alt', 'はなまるスタンプ');
-                  stampElem.classList.add('image', 'is-24x24')
-                  td.append(stampElem);
-                }
-
-            // // 祝日の追加
-            // const holidayElem = document.createElement('div');
-            // // ライブラリから祝日を取得
-            // holidays.forEach(obj => {
-            //     if(obj.date.getTime() === dateCount.getTime()) {
-            //         holidayElem.setAttribute('class', 'holiday bg-success text-white');
-            //         holidayElem.textContent = obj.name;
-            //     }
-            // });
-            // td.append(holidayElem);
-
-            // <tr>要素の配下に<td>要素を追加
-            tr.append(td);
-            // dateCountの日付をカウントアップ
-            dateCount.setDate(dateCount.getDate() + 1);
-          }
-          // <tbody>要素の配下に<tr>要素を追加
-          tbody.append(tr);
-
+        for (let i = 0; i < 7; i++) {
+          // <td>要素を生成
+          const td = document.createElement('td');
+          // class属性の設定
+          let attr = '';
           if (dateCount.getMonth() !== month) {
-            break;
+            attr += 'text-black-50';
           }
+          if (dateCount.toLocaleDateString() === today.toLocaleDateString()) {
+            attr += ' has-background-danger has-text-white-bis';
+          }
+          td.setAttribute('class', attr);
+
+          // 日付要素の追加
+          const dateElem = document.createElement('div');
+          dateElem.setAttribute('class', 'fw-bold');
+          dateElem.textContent = dateCount.getDate();
+
+          // <td>idに日付を添付
+          const [thisYear, thisMonth, thisDay] = [
+            dateCount.getFullYear(),
+            dateCount.getMonth() + 1,
+            dateCount.getDate(),
+          ];
+          const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
+          dateElem.id = thisDate;
+          // クリックされたときの処理
+          dateElem.onclick = async (e) => {
+            const id = e.target.id;
+            // 挿入する日記を取得&エレメントの作成
+            const response = await fetch('/get-daydiary?date=' + id);
+            let diary = await response.text();
+            if (diary === '-1') {
+              diary = 'この日ににっきはありません。';
+            }
+            document.getElementById('diary').innerHTML = `<p>${diary}<p>`;
+            // モーダルウィンドウ
+            document.getElementById('modal-window').classList.add('is-active');
+            document.getElementById('modal-close').onclick = () => {
+              document.getElementById('modal-window').classList.remove('is-active');
+            };
+            document.getElementById('modal-background').onclick = () => {
+              document.getElementById('modal-window').classList.remove('is-active');
+            };
+          };
+          td.append(dateElem);
+
+          // スタンプの追加
+          if (diaryDateList.includes(dateToString(dateCount))) {
+            const stampElem = document.createElement('img');
+            stampElem.setAttribute('src', 'img/hanamaru.png');
+            stampElem.setAttribute('alt', 'はなまるスタンプ');
+            stampElem.classList.add('image', 'is-24x24')
+            td.append(stampElem);
+          }
+
+          // // 祝日の追加
+          // const holidayElem = document.createElement('div');
+          // // ライブラリから祝日を取得
+          // holidays.forEach(obj => {
+          //     if(obj.date.getTime() === dateCount.getTime()) {
+          //         holidayElem.setAttribute('class', 'holiday bg-success text-white');
+          //         holidayElem.textContent = obj.name;
+          //     }
+          // });
+          // td.append(holidayElem);
+
+          // <tr>要素の配下に<td>要素を追加
+          tr.append(td);
+          // dateCountの日付をカウントアップ
+          dateCount.setDate(dateCount.getDate() + 1);
         }
-        return tbody;
+        // <tbody>要素の配下に<tr>要素を追加
+        tbody.append(tr);
+
+        if (dateCount.getMonth() !== month) {
+          break;
+        }
       }
+      return tbody;
+    }
 
     /**
      * dateが存在する月のカレンダーをHTMLで表示する。
      * @param {Date} date 表示したい月のDateオブジェクト
      */
-    async function showCalendar(date){
-        year = date.getFullYear();
-        month = date.getMonth() + 1;
-        // 年月をHTMLに書き込み
-        document.getElementById('year').textContent = year;
-        document.getElementById('month').textContent = month;
-        // <tbody>要素をHTMLに追加
-        calendar = document.getElementById('calendar');
-        calendar.replaceChild(
-          await createCalendarTbodyElem(date.getFullYear(), date.getMonth()),
-          calendar.lastChild
-        );
+    async function showCalendar(date) {
+      year = date.getFullYear();
+      month = date.getMonth() + 1;
+      // 年月をHTMLに書き込み
+      document.getElementById('year').textContent = year;
+      document.getElementById('month').textContent = month;
+      // <tbody>要素をHTMLに追加
+      calendar = document.getElementById('calendar');
+      calendar.replaceChild(
+        await createCalendarTbodyElem(date.getFullYear(), date.getMonth()),
+        calendar.lastChild
+      );
     }
 
-      const prevMonthBtn = document.getElementById('prevMonthBtn');
-      prevMonthBtn.addEventListener('click', function () {
-        date.setMonth(date.getMonth() - 1);
-        showCalendar(date);
-      });
-
-      const nextMonthBtn = document.getElementById('nextMonthBtn');
-      nextMonthBtn.addEventListener('click', function () {
-        date.setMonth(date.getMonth() + 1);
-        showCalendar(date);
-      });
-
-      const date = new Date();
+    const prevMonthBtn = document.getElementById('prevMonthBtn');
+    prevMonthBtn.addEventListener('click', function () {
+      date.setMonth(date.getMonth() - 1);
       showCalendar(date);
-    </script>
-  </body>
+    });
+
+    const nextMonthBtn = document.getElementById('nextMonthBtn');
+    nextMonthBtn.addEventListener('click', function () {
+      date.setMonth(date.getMonth() + 1);
+      showCalendar(date);
+    });
+
+    const date = new Date();
+    showCalendar(date);
+  </script>
+</body>
+
 </html>

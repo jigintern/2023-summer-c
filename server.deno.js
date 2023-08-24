@@ -32,7 +32,7 @@ serve(async (req) => {
         /********************************
         *            Diary              * 
         ********************************/
-
+    
     // 日記の追加
     // 引数:{date, weather, text}
     if (req.method === "POST" && pathname === "/insert-diary")
@@ -44,13 +44,18 @@ serve(async (req) => {
             password: MYSQL_PASSWORD,
             db: MYSQL_DBNAME
         })
-        
+
+        let [year, month, date] = reqJson.date.split('-');
+        month = month.padStart(2, '0');
+        date = date.padStart(2, '0');
+        const day = year + '-' + month + '-' + date;
+
         const command = await mySqlClient.execute(`INSERT INTO diary (??, ??, ??) VALUES (?, ?, ?); `, 
             [
             "date",
             "weather",
             "text",
-            new Date(reqJson.date),
+            day,
             reqJson.weather,
             reqJson.text,
             ]
@@ -81,7 +86,6 @@ serve(async (req) => {
     // 特定の日付の日記の取得
     // 引数:{date}
     if (req.method === "GET" && pathname === "/get-daydiary") {
-        let date = new URL(req.url).searchParams.get("date");
         const mySqlClient = await new Client().connect({    // データベースと接続
             hostname: MYSQL_HOSTNAME,
             username: MYSQL_USER,
@@ -89,19 +93,19 @@ serve(async (req) => {
             db: MYSQL_DBNAME
         })
 
-        date = new Date(date);
-        date.setHours(date.getHours() - 9);
-        console.log(date);
+        let [year, month, date] = new URL(req.url).searchParams.get("date").split('-');
+        month = month.padStart(2, '0');
+        date = date.padStart(2, '0');
+        const day = year + '-' + month + '-' + date;
 
         const command = await mySqlClient.execute(`SELECT * FROM diary WHERE ?? = ? ORDER BY date ASC;`,
         [
             "date",
-            date,
+            day,
         ]);
 
         // MySQLのDBとの通信を終了する
         mySqlClient.close()
-        console.log(Object.keys(command.rows).length);
         if (Object.keys(command.rows).length == 0) {
             return new Response("-1")
         } else {
@@ -146,16 +150,14 @@ serve(async (req) => {
         })
         
         
-        let date = new Date(reqJson.date);
-        date.setHours(date.getHours() + 9);
-        let firstdate = new Date(date.setDate(1));
-        let enddate = new Date(date.setMonth(date.getMonth() + 1));
-        enddate = new Date(enddate.setSeconds(enddate.getSeconds() - 1));
+        let [year, month, date] = reqJson.date.split('-');
+        month = month.padStart(2, '0');
+        date = date.padStart(2, '0');
+        const day = year + '-' + month + '-' + '%';
         
-        const command = await mySqlClient.execute(`SELECT date FROM diary WHERE date >= ? and date <= ? ORDER BY date ASC; `,
+        const command = await mySqlClient.execute(`SELECT date FROM diary WHERE date LIKE ? ORDER BY date ASC; `,
             [
-                firstdate,
-                enddate,
+                day
             ]
         )
         // MySQLのDBとの通信を終了する
@@ -164,13 +166,9 @@ serve(async (req) => {
         const json = command.rows;
         let datelist = [];
         let tmp;
-        let tmpdate, tmpmonth, tmpyear;
         for (let i=0;i<Object.keys(json).length;i++) {
             tmp = json[i]["date"];
-            tmpyear = tmp.getFullYear().toString();
-            tmpmonth = (tmp.getMonth() + 1).toString();
-            tmpdate = tmp.getDate().toString();
-            datelist.push(tmpyear + '-' + tmpmonth.padStart(2, '0') + '-' + tmpdate.padStart(2, '0'));
+            datelist.push(tmp);
         }
 
         return new Response(datelist);
@@ -226,12 +224,17 @@ serve(async (req) => {
             password: MYSQL_PASSWORD,
             db: MYSQL_DBNAME
         })
+
+        let [year, month, date] = reqJson.date.split('-');
+        month = month.padStart(2, '0');
+        date = date.padStart(2, '0');
+        const day = year + '-' + month + '-' + date;
         
         const command = await mySqlClient.execute(`INSERT INTO schedule (??, ??) VALUES (?, ?); `, 
             [
             "date",
             "name",
-            new Date(reqJson.date),
+            day,
             reqJson.name,
             ]
         )
@@ -275,17 +278,18 @@ serve(async (req) => {
             db: MYSQL_DBNAME
         })
 
-        let date = new Date(new URL(req.url).searchParams.get("date"));
-        date.setHours(date.getHours() - 9);
-        console.log(date);
+        let [year, month, date] = new URL(req.url).searchParams.get("date").split('-');
+        month = month.padStart(2, '0');
+        date = date.padStart(2, '0');
+        const day = year + '-' + month + '-' + date;
+
         const command = await mySqlClient.execute(`SELECT * FROM schedule WHERE date = ? ORDER BY date ASC;`,
         [
-            date
+            day
         ]);
 
         // MySQLのDBとの通信を終了する
         mySqlClient.close();
-        console.log(command.rows);
         return new Response(JSON.stringify(command.rows));
     }
 
@@ -302,16 +306,14 @@ serve(async (req) => {
         })
         
         
-        let date = new Date(reqJson.date);
-        date.setHours(date.getHours() + 9);
-        let firstdate = new Date(date.setDate(1));
-        let enddate = new Date(date.setMonth(date.getMonth() + 1));
-        enddate = new Date(enddate.setSeconds(enddate.getSeconds() - 1));
+        let [year, month, date] = reqJson.date.split('-');
+        month = month.padStart(2, '0');
+        date = date.padStart(2, '0');
+        const day = year + '-' + month + '-' + '%';
         
-        const command = await mySqlClient.execute(`SELECT date FROM schedule WHERE date >= ? and date <= ? ORDER BY date ASC; `,
+        const command = await mySqlClient.execute(`SELECT date FROM schedule WHERE date LIKE ? ORDER BY date ASC; `,
             [
-                firstdate,
-                enddate,
+                day
             ]
         )
         // MySQLのDBとの通信を終了する
@@ -323,10 +325,7 @@ serve(async (req) => {
         let tmpdate, tmpmonth, tmpyear;
         for (let i=0;i<Object.keys(json).length;i++) {
             tmp = json[i]["date"];
-            tmpyear = tmp.getFullYear().toString();
-            tmpmonth = (tmp.getMonth() + 1).toString();
-            tmpdate = tmp.getDate().toString();
-            datelist.push(tmpyear + '-' + tmpmonth.padStart(2, '0') + '-' + tmpdate.padStart(2, '0'));
+            datelist.push(tmp);
         }
 
         return new Response(datelist);

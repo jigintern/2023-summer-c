@@ -1,3 +1,5 @@
+import * as party from "https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.2/dist/confetti.browser.min.js";
+
 // 開始時に実行する
 // 日記の全件取得
 window.onload = async () => {
@@ -174,3 +176,32 @@ const handleDeleteButtonClick = async(e) => {
     console.log(error)
   }
 }
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+document.getElementById('bell').addEventListener('click', async function(){
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = ("00" + (now.getMonth()+1)).slice(-2);
+  const dd = ("00" + (now.getDate())).slice(-2);
+  const date = `${yyyy}-${mm}-${dd}`;
+  const response = await fetch("/diary-date", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      date: date
+    })
+  })
+  const tmp = await response.text();
+  const result = tmp.split(',');
+  for (let i=0;i<result.length;i++) {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+    await sleep(100);
+  }
+});

@@ -1,0 +1,7 @@
+table {
+    table-layout: fixed;
+}
+
+table#calendar td {
+    height: 81px;
+}

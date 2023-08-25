@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta charset="utf-8" />
-    <title>カレンダー | ぜったいかききれるにっきちょう</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <title>カレンダー | ぜったいかききれるにっきちょう</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="calendar.css" />
+  <script src="https://kit.fontawesome.com/f55457357a.js" crossorigin="anonymous"></script>
+</head>
   <body>
     <section class="section">
       <div class="container">
@@ -126,15 +127,155 @@
         <button id="modal-close" class="modal-close is-large" aria-label="close"></button>
       </div>
     </div>
-    <!-- ここまでモーダルウィンドウ -->
-    <script>
-      // Dateを文字列'yyyy-mm-dd'に変換
-      function dateToString(date) {
-        y = date.getFullYear();
-        m = ('00' + (date.getMonth() + 1)).slice(-2);
-        d = ('00' + date.getDate()).slice(-2);
-        return `${y}-${m}-${d}`;
+  </div>
+  <!-- ここまでモーダルウィンドウ -->
+  <script>
+    // Dateを文字列'yyyy-mm-dd'に変換
+    function dateToString(date) {
+      y = date.getFullYear();
+      m = ('00' + (date.getMonth() + 1)).slice(-2);
+      d = ('00' + date.getDate()).slice(-2);
+      return `${y}-${m}-${d}`;
+    }
+
+    // Dateで指定された月の日記が書かれた日の一覧を取得
+    async function getDiaryDateList(d) {
+      const date = dateToString(d);
+      const response = await fetch("/diary-date", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: date
+        })
+      })
+
+      const tmp = await response.text();
+      const result = tmp.split(',');
+      return result;
+    }
+
+    // Dateで指定された月の予定が書かれた日の一覧を取得
+    async function getEventDateList(d) {
+      const date = dateToString(d);
+      const response = await fetch("/event-date", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: date
+        })
+      })
+
+      const tmp = await response.text();
+      const result = tmp.split(',');
+      return result;
+    }
+
+    /**
+     * カレンダーの曜日列(<thead>要素)の下に挿入する日付行列(<tbody>要素)を返す。
+     * @param {Number} year 年
+     * @param {Number} month 月
+     * @returns {HTMLTableSectionElement} カレンダーの内容が書かれた<tbody>要素。
+     */
+    async function createCalendarTbodyElem(year, month) {
+      const tbody = document.createElement('tbody');
+      const today = new Date();
+      // カレンダーの1行1列目の日に該当するDateオブジェクトを生成
+      const dateCount = new Date(year, month, 1 - (new Date(year, month, 1).getDay()), 9, 0, 0);
+      // 日記を書いた日の'yyyy-mm-dd'文字列の配列を取得
+      const diaryDateList = await getDiaryDateList(new Date(year, month, 1));
+      // 予定がある日の'yyyy-mm-dd'文字列の配列を取得
+      const eventDateList = await getEventDateList(new Date(year, month, 1));
+
+      while (true) {
+        // <tr>要素を生成
+        const tr = document.createElement('tr');
+
+        for (let i = 0; i < 7; i++) {
+          // <td>要素を生成
+          const td = document.createElement('td');
+          // class属性の設定
+          let attr = '';
+          if (dateCount.getMonth() !== month) {
+            attr += 'has-text-grey-light';
+          }
+          if (dateCount.toLocaleDateString() === today.toLocaleDateString()) {
+            attr += ' has-background-warning';
+          }
+          td.setAttribute('class', attr);
+
+          // ---ここから日付&予定マーク要素の追加---
+          const dateIconElem = document.createElement('div');
+          dateIconElem.classList.add('icon-text');
+
+          const dateElem = document.createElement('span');
+          dateElem.classList.add('has-text-weight-bold');
+          dateElem.textContent = dateCount.getDate();
+
+          const iconElem = document.createElement('span');
+          iconElem.classList.add('icon', 'is-small');
+
+          const iElem = document.createElement('i')
+          iElem.setAttribute('class', 'fas fa-solid fa-star');
+          iElem.setAttribute('style', 'color: #e7b11d;');
+
+          iconElem.append(iElem);
+          dateIconElem.append(dateElem);
+          if (eventDateList.includes(dateToString(dateCount))){
+            dateIconElem.append(iconElem);
+          }
+          // ---ここまで---
+
+          // <td>idに日付を添付
+          const [thisYear, thisMonth, thisDay] = [
+            dateCount.getFullYear(),
+            dateCount.getMonth() + 1,
+            dateCount.getDate(),
+          ];
+          const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
+          dateElem.id = thisDate;
+          // クリックされたときの処理
+          dateElem.onclick = async (e) => {
+            const id = e.target.id;
+            // 挿入する日記を取得&エレメントの作成
+            const response = await fetch('/get-daydiary?date=' + id);
+            let diary = await response.text();
+            if (diary === '-1') {
+              diary = 'この日ににっきはありません。';
+            }
+            document.getElementById('diary').innerHTML = `<p>${diary}<p>`;
+            // モーダルウィンドウ
+            document.getElementById('modal-window').classList.add('is-active');
+            document.getElementById('modal-close').onclick = () => {
+              document.getElementById('modal-window').classList.remove('is-active');
+            };
+            document.getElementById('modal-background').onclick = () => {
+              document.getElementById('modal-window').classList.remove('is-active');
+            };
+          };
+          td.append(dateIconElem);
+
+          // スタンプの追加
+          if (diaryDateList.includes(dateToString(dateCount))) {
+            const stampElem = document.createElement('img');
+            stampElem.setAttribute('src', 'img/hanamaru.png');
+            stampElem.setAttribute('alt', 'はなまるスタンプ');
+            stampElem.classList.add('image', 'is-24x24')
+            td.append(stampElem);
+          }
+
+          // <tr>要素の配下に<td>要素を追加
+          tr.append(td);
+          // dateCountの日付をカウントアップ
+          dateCount.setDate(dateCount.getDate() + 1);
+        }
+        // <tbody>要素の配下に<tr>要素を追加
+        tbody.append(tr);
+
+        if (dateCount.getMonth() !== month) {
+          break;
+        }
       }
+    }
 
       // Dateで指定された月の日記が書かれた日の一覧を取得
       async function getDiaryDateList(d) {

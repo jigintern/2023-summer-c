@@ -1,91 +1,95 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta charset="utf-8" />
   <title>カレンダー | ぜったいかききれるにっきちょう</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="calendar.css" />
+  <script src="https://kit.fontawesome.com/f55457357a.js" crossorigin="anonymous"></script>
 </head>
-
-<body>
-  <section class="section">
-    <div class="container">
-      <div class="columns is-mobile is-gapless is-centered is-vcentered">
-        <div class="column">
-          <figure class="image is-64x64 container">
-            <img src="img/bell.png" alt="ベル" />
-          </figure>
-        </div>
-        <div class="column is-8">
-          <h1 class="title has-text-centered">にっきアプリ</h1>
-        </div>
-        <div class="column">
-          <a href="index.html">
-            <figure class="image is-64x64 container">
-              <img src="img/pencil.png" alt="鉛筆" />
-            </figure>
-          </a>
-        </div>
-      </div>
-      <div><span id="year"></span>年<span id="month"></span>月</div>
-      <table id="calendar" class="table is-bordered is-fullwidth">
-        <thead>
-          <tr>
-            <th>日</th>
-            <th>月</th>
-            <th>火</th>
-            <th>水</th>
-            <th>木</th>
-            <th>金</th>
-            <th>土</th>
-          </tr>
-        </thead>
-      </table>
-      <div class="buttons has-addons is-centered">
-        <button id="prevMonthBtn" class="button is-medium">まえの月</button>
-        <button id="nextMonthBtn" class="button is-medium">つぎの月</button>
-      </div>
-      <form method="post">
-        <div class="columns is-mobile">
+  <body>
+    <section class="section">
+      <div class="container">
+        <div class="columns is-mobile is-gapless is-centered is-vcentered">
           <div class="column">
-            <div class="field">
-              <label class="label required">ひづけ</label>
-              <div class="control">
-                <input id="date-input" class="input" type="date" required />
+            <figure class="image is-64x64 container">
+              <img src="img/bell.png" alt="ベル" />
+            </figure>
+          </div>
+          <div class="column is-8">
+            <h1 class="title has-text-centered">にっきアプリ</h1>
+          </div>
+          <div class="column">
+            <a href="index.html">
+              <figure class="image is-64x64 container">
+                <img src="img/pencil.png" alt="鉛筆" />
+              </figure>
+            </a>
+          </div>
+        </div>
+        <div><span id="year"></span>年<span id="month"></span>月</div>
+        <table id="calendar" class="table is-bordered is-fullwidth">
+          <thead>
+            <tr>
+              <th>日</th>
+              <th>月</th>
+              <th>火</th>
+              <th>水</th>
+              <th>木</th>
+              <th>金</th>
+              <th>土</th>
+            </tr>
+          </thead>
+        </table>
+        <div class="buttons has-addons is-centered">
+          <button id="prevMonthBtn" class="button is-medium">まえの月</button>
+          <button id="nextMonthBtn" class="button is-medium">つぎの月</button>
+        </div>
+        <form method="post">
+          <div class="columns is-mobile">
+            <div class="column">
+              <div class="field">
+                <label class="label required">ひづけ</label>
+                <div class="control">
+                  <input id="date-input" class="input" type="date" required />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="field">
-          <label class="label required">よていをかく</label>
-          <div class="control">
-            <input id="schedule-input" class="input is-info" name="schedule" placeholder="例）夏祭り" required />
+          <div class="field">
+            <label class="label required">よていをかく</label>
+            <div class="control">
+              <input
+                id="schedule-input"
+                class="input is-info"
+                name="schedule"
+                placeholder="例）夏祭り"
+                required
+              />
+            </div>
           </div>
-        </div>
-        <div class="control buttons is-right">
-          <button id="schedule-button" class="button is-info">
-            <span class="icon">
-              <img src="img/pencil.png" alt="とうこうアイコン" />
-            </span>
-            <span>
-              とうこう
-            </span>
-          </button>
-        </div>
-      </form>
-      <div class="table-container">
-        <table class="table is-striped is-fullwidth">
-          <thead>
-            <tr>
-              <th>ひづけ</th>
-              <th>よてい</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="diary-list">
-            <!-- <tr>
+          <div class="control buttons is-right">
+            <button id="schedule-button" class="button is-info">
+              <span class="icon">
+                <img src="img/pencil.png" alt="とうこうアイコン" />
+              </span>
+              <span> とうこう </span>
+            </button>
+          </div>
+        </form>
+        <div class="table-container">
+          <table class="table is-striped is-fullwidth">
+            <thead>
+              <tr>
+                <th>ひづけ</th>
+                <th>よてい</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="diary-list">
+              <!-- <tr>
               <td>08/21</td>
               <td>
                 <figure class="image is-24x24">
@@ -103,23 +107,25 @@
               </td>
               <td>きょうはふがふが日よりでした。</td>
             </tr> -->
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-  </section>
-  <!-- モーダルウィンドウ -->
-  <div id="modal">
-    <div id="modal-window" class="modal">
-      <div class="modal-background" id="modal-background"></div>
-      <div class="modal-content">
-        <div class="box">
-          <h4 class="title is-4">この日のにっき</h4>
-          <div id="diary"></div>
+            </tbody>
+          </table>
         </div>
       </div>
-      <button id="modal-close" class="modal-close is-large" aria-label="close"></button>
+    </section>
+    <!-- モーダルウィンドウ -->
+    <div id="modal">
+      <div id="modal-window" class="modal">
+        <div class="modal-background" id="modal-background"></div>
+        <div class="modal-content content">
+          <div class="box">
+            <h4 class="title is-4">この日のにっき</h4>
+            <div id="diary"></div>
+            <h4 class="title is-4">この日のよてい</h4>
+            <div id="event"></div>
+          </div>
+        </div>
+        <button id="modal-close" class="modal-close is-large" aria-label="close"></button>
+      </div>
     </div>
   </div>
   <!-- ここまでモーダルウィンドウ -->
@@ -148,6 +154,22 @@
       return result;
     }
 
+    // Dateで指定された月の予定が書かれた日の一覧を取得
+    async function getEventDateList(d) {
+      const date = dateToString(d);
+      const response = await fetch("/event-date", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: date
+        })
+      })
+
+      const tmp = await response.text();
+      const result = tmp.split(',');
+      return result;
+    }
+
     /**
      * カレンダーの曜日列(<thead>要素)の下に挿入する日付行列(<tbody>要素)を返す。
      * @param {Number} year 年
@@ -161,6 +183,8 @@
       const dateCount = new Date(year, month, 1 - (new Date(year, month, 1).getDay()), 9, 0, 0);
       // 日記を書いた日の'yyyy-mm-dd'文字列の配列を取得
       const diaryDateList = await getDiaryDateList(new Date(year, month, 1));
+      // 予定がある日の'yyyy-mm-dd'文字列の配列を取得
+      const eventDateList = await getEventDateList(new Date(year, month, 1));
 
       while (true) {
         // <tr>要素を生成
@@ -179,39 +203,29 @@
           }
           td.setAttribute('class', attr);
 
-          // 日付要素の追加
-          const dateElem = document.createElement('div');
-          dateElem.setAttribute('class', 'has-text-weight-bold');
+          // ---ここから日付&予定マーク要素の追加---
+          const dateIconElem = document.createElement('div');
+          dateIconElem.classList.add('icon-text');
+
+          const dateElem = document.createElement('span');
+          dateElem.classList.add('has-text-weight-bold');
           dateElem.textContent = dateCount.getDate();
 
-          // <td>idに日付を添付
-          const [thisYear, thisMonth, thisDay] = [
-            dateCount.getFullYear(),
-            dateCount.getMonth() + 1,
-            dateCount.getDate(),
-          ];
-          const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
-          dateElem.id = thisDate;
-          // クリックされたときの処理
-          dateElem.onclick = async (e) => {
-            const id = e.target.id;
-            // 挿入する日記を取得&エレメントの作成
-            const response = await fetch('/get-daydiary?date=' + id);
-            let diary = await response.text();
-            if (diary === '-1') {
-              diary = 'この日ににっきはありません。';
-            }
-            document.getElementById('diary').innerHTML = `<p>${diary}<p>`;
-            // モーダルウィンドウ
-            document.getElementById('modal-window').classList.add('is-active');
-            document.getElementById('modal-close').onclick = () => {
-              document.getElementById('modal-window').classList.remove('is-active');
-            };
-            document.getElementById('modal-background').onclick = () => {
-              document.getElementById('modal-window').classList.remove('is-active');
-            };
-          };
-          td.append(dateElem);
+          const iconElem = document.createElement('span');
+          iconElem.classList.add('icon', 'is-small');
+
+          const iElem = document.createElement('i')
+          iElem.setAttribute('class', 'fas fa-solid fa-star');
+          iElem.setAttribute('style', 'color: #e7b11d;');
+
+          iconElem.append(iElem);
+          dateIconElem.append(dateElem);
+          if (eventDateList.includes(dateToString(dateCount))){
+            dateIconElem.append(iconElem);
+          }
+          // ---ここまで---
+
+          td.append(dateIconElem);
 
           // スタンプの追加
           if (diaryDateList.includes(dateToString(dateCount))) {
@@ -221,6 +235,42 @@
             stampElem.classList.add('image', 'is-24x24')
             td.append(stampElem);
           }
+
+          // <td>idに日付を添付
+          const [thisYear, thisMonth, thisDay] = [
+            dateCount.getFullYear(),
+            dateCount.getMonth() + 1,
+            dateCount.getDate(),
+          ];
+          const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
+          td.id = thisDate;
+          // クリックされたときの処理
+          td.onclick = async (e) => {
+              const id = e.target.id;
+              // 挿入する日記を取得&エレメントの作成
+              const responseDiary = await fetch('/get-daydiary?date=' + id);
+              let diary = await responseDiary.text();
+              if (diary === '-1') {
+                diary = 'この日ににっきはありません。';
+              }
+              document.getElementById('diary').innerHTML = `<p>${diary}<p>`;
+              // 挿入する予定を取得
+              const responseEvent = await fetch('/get-event-one?date=' + id);
+              let event = await responseEvent.text();
+              if (event === '-1') {
+                event = 'この日によていはありません';
+              }
+              document.getElementById('event').innerHTML = `<p>${event}<p>`;
+              // モーダルウィンドウ
+              document.getElementById('modal-window').classList.add('is-active');
+              document.getElementById('modal-close').onclick = () => {
+                document.getElementById('modal-window').classList.remove('is-active');
+              };
+              document.getElementById('modal-background').onclick = () => {
+                document.getElementById('modal-window').classList.remove('is-active');
+              };
+            };
+
 
           // <tr>要素の配下に<td>要素を追加
           tr.append(td);
@@ -236,152 +286,148 @@
       }
       return tbody;
     }
+      /**
+       * dateが存在する月のカレンダーをHTMLで表示する。
+       * @param {Date} date 表示したい月のDateオブジェクト
+       */
+      async function showCalendar(date) {
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        // 年月をHTMLに書き込み
+        document.getElementById('year').textContent = year;
+        document.getElementById('month').textContent = month;
+        // <tbody>要素をHTMLに追加
+        calendar = document.getElementById('calendar');
+        calendar.replaceChild(
+          await createCalendarTbodyElem(date.getFullYear(), date.getMonth()),
+          calendar.lastChild
+        );
+      }
 
-    /**
-     * dateが存在する月のカレンダーをHTMLで表示する。
-     * @param {Date} date 表示したい月のDateオブジェクト
-     */
-    async function showCalendar(date) {
-      year = date.getFullYear();
-      month = date.getMonth() + 1;
-      // 年月をHTMLに書き込み
-      document.getElementById('year').textContent = year;
-      document.getElementById('month').textContent = month;
-      // <tbody>要素をHTMLに追加
-      calendar = document.getElementById('calendar');
-      calendar.replaceChild(
-        await createCalendarTbodyElem(date.getFullYear(), date.getMonth()),
-        calendar.lastChild
-      );
-    }
+      const prevMonthBtn = document.getElementById('prevMonthBtn');
+      prevMonthBtn.addEventListener('click', function () {
+        date.setMonth(date.getMonth() - 1);
+        showCalendar(date);
+      });
 
-    const prevMonthBtn = document.getElementById('prevMonthBtn');
-    prevMonthBtn.addEventListener('click', function () {
-      date.setMonth(date.getMonth() - 1);
+      const nextMonthBtn = document.getElementById('nextMonthBtn');
+      nextMonthBtn.addEventListener('click', function () {
+        date.setMonth(date.getMonth() + 1);
+        showCalendar(date);
+      });
+
+      const date = new Date();
       showCalendar(date);
-    });
 
-    const nextMonthBtn = document.getElementById('nextMonthBtn');
-    nextMonthBtn.addEventListener('click', function () {
-      date.setMonth(date.getMonth() + 1);
-      showCalendar(date);
-    });
+      document.getElementById('schedule-button').onclick = async (e) => {
+        e.preventDefault();
+        const schedule = document.getElementById('schedule-input').value;
+        const date = document.getElementById('date-input').value;
 
-    const date = new Date();
-    showCalendar(date);
+        if (date === '') {
+          window.alert('ひづけをにゅうりょくしてね！');
+          return;
+        }
 
-    document.getElementById("schedule-button").onclick = async (e) => {
-      e.preventDefault();
-      const schedule = document.getElementById("schedule-input").value;
-      const date = document.getElementById("date-input").value;
+        if (schedule === '') {
+          window.alert('よていをかいてね！');
+          return;
+        }
 
-      if (date === "") {
-        window.alert("ひづけをにゅうりょくしてね！");
-        return;
-      }
+        try {
+          await fetch('/insert-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              date: date,
+              name: schedule,
+            }),
+          });
+          window.location.reload();
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      window.onload = async () => {
+        const response = await fetch('/get-event');
+        let json = await response?.json();
+        const diaryList = document.getElementById('diary-list');
+        console.log(json);
+        for (let i = 0; i < Object.keys(json).length; i++) {
+          const id = json[i]['id'];
 
-      if (schedule === "") {
-        window.alert("よていをかいてね！")
-        return;
-      }
+          // 行を生成
+          const row = document.createElement('tr');
+          row.classList.add('id');
+          row.id = id;
 
-      try {
-        await fetch("/insert-event", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            date: date,
-            name: schedule,
-          })
-        });
-        window.location.reload();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    window.onload = async () => {
-      const response = await fetch("/get-event");
-      let json = await response?.json();
-      const diaryList = document.getElementById("diary-list");
-      console.log(json);
-      for (let i = 0; i < Object.keys(json).length; i++) {
-        const id = json[i]["id"];
+          // 削除ボタンを生成
+          const deleteButton = document.createElement('button');
+          deleteButton.id = 'delete-button-' + id;
+          deleteButton.classList.add('delete');
+          deleteButton.onclick = handleDeleteButtonClick;
 
-        // 行を生成
-        const row = document.createElement("tr");
-        row.classList.add("id");
-        row.id = id;
+          //削除ボタン列を生成
+          const deleteButtonColumn = document.createElement('td');
+          deleteButtonColumn.id = id;
+          deleteButtonColumn.appendChild(deleteButton);
 
-        // 削除ボタンを生成
-        const deleteButton = document.createElement("button");
-        deleteButton.id = "delete-button-" + id;
-        deleteButton.classList.add("delete");
-        deleteButton.onclick = handleDeleteButtonClick;
+          // 日付列を生成
+          const dateColumn = document.createElement('td');
+          dateColumn.classList.add('date', 'single-line');
+          dateColumn.textContent = json[i]['date'].slice(5, 10);
 
-        //削除ボタン列を生成
-        const deleteButtonColumn = document.createElement("td");
-        deleteButtonColumn.id = id;
-        deleteButtonColumn.appendChild(deleteButton);
+          // 天気列を生成
+          // const weatherColumn = document.createElement("td");
+          // weatherColumn.classList.add("weather")
+          // const weatherFigure = document.createElement("figure");
+          // weatherFigure.classList.add("image", "is-24x24");
+          // const weatherImage = document.createElement("img");
+          // weatherImage.classList.add("img");
+          // weatherImage.src = "img/" + json[i]["weather"] + ".png";
+          // weatherImage.alt = "weather";
+          // weatherFigure.appendChild(weatherImage);
+          // weatherColumn.appendChild(weatherFigure);
 
-        // 日付列を生成
-        const dateColumn = document.createElement("td");
-        dateColumn.classList.add("date", "single-line")
-        dateColumn.textContent = json[i]["date"].slice(5, 10);
+          // テキスト列を生成
+          const textColumn = document.createElement('td');
+          textColumn.classList.add('text');
+          textColumn.id = 'text';
+          textColumn.textContent = json[i]['name'];
 
-        // 天気列を生成
-        // const weatherColumn = document.createElement("td");
-        // weatherColumn.classList.add("weather")
-        // const weatherFigure = document.createElement("figure");
-        // weatherFigure.classList.add("image", "is-24x24");
-        // const weatherImage = document.createElement("img");
-        // weatherImage.classList.add("img");
-        // weatherImage.src = "img/" + json[i]["weather"] + ".png";
-        // weatherImage.alt = "weather";
-        // weatherFigure.appendChild(weatherImage);
-        // weatherColumn.appendChild(weatherFigure);
+          // 列を行に追加
+          row.appendChild(dateColumn);
+          // row.appendChild(weatherColumn);
+          row.appendChild(textColumn);
+          row.appendChild(deleteButtonColumn);
 
-        // テキスト列を生成
-        const textColumn = document.createElement("td");
-        textColumn.classList.add("text")
-        textColumn.id = "text"
-        textColumn.textContent = json[i]["name"];
+          // 行をテーブルに追加
+          diaryList.appendChild(row);
+        }
+      };
 
-        // 列を行に追加
-        row.appendChild(dateColumn);
-        // row.appendChild(weatherColumn);
-        row.appendChild(textColumn);
-        row.appendChild(deleteButtonColumn);
+      // 日記の削除
 
-        // 行をテーブルに追加
-        diaryList.appendChild(row);
-      }
-    }
-
-    // 日記の削除
-
-    const handleDeleteButtonClick = async (e) => {
-      e.preventDefault();
-      // 削除の確認
-      if (confirm("削除しますか?") === false) {
-        return;
-      }
-      const id = e.target.parentNode.id;
-      try {
-        await fetch("/delete-event", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: id
-          })
-        });
-        window.location.reload();
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-
-  </script>
-</body>
-
+      const handleDeleteButtonClick = async (e) => {
+        e.preventDefault();
+        // 削除の確認
+        if (confirm('削除しますか?') === false) {
+          return;
+        }
+        const id = e.target.parentNode.id;
+        try {
+          await fetch('/delete-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: id,
+            }),
+          });
+          window.location.reload();
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    </script>
+  </body>
 </html>

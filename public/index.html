@@ -15,7 +15,7 @@
       <div class="columns is-mobile is-gapless is-centered is-vcentered">
         <div class="column">
           <figure class="image is-64x64 container">
-            <img src="img/bell.png" alt="ベル">
+            <img src="img/bell.png" id="bell" alt="ベル">
           </figure>
         </div>
         <div class="column is-8">
@@ -109,29 +109,13 @@
             </tr>
           </thead>
           <tbody id="diary-list">
-            <!-- <tr>
-              <td>08/21</td>
-              <td>
-                <figure class="image is-24x24">
-                  <img src="img/0.png" alt="はれ" />
-                </figure>
-              </td>
-              <td>きょうはほげほげ日よりでした。</td>
-            </tr>
-            <tr>
-              <td>08/22</td>
-              <td>
-                <figure class="image is-24x24">
-                  <img src="img/1.png" alt="くもり" />
-                </figure>
-              </td>
-              <td>きょうはふがふが日よりでした。</td>
-            </tr> -->
           </tbody>
         </table>
       </div>
     </div>
   </section>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.2/dist/confetti.browser.min.js"></script>
+  <script type="module" src="script.js"></script>
   <script type="module">
     const elem = document.getElementById("date-input");
     const now = new Date();
@@ -139,8 +123,7 @@
     const mm = ("00" + (now.getMonth()+1)).slice(-2);
     const dd = ("00" + (now.getDate())).slice(-2);
     elem.max = `${yyyy}-${mm}-${dd}`
-  </script>
-  <script type="module" src="script.js"></script>
+    </script>
 </body>
 
 </html>

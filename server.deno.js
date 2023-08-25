@@ -29,6 +29,12 @@ serve(async (req) => {
     const MYSQL_USER = Deno.env.get("MYSQL_USER")
     const MYSQL_PASSWORD = Deno.env.get("MYSQL_PASSWORD")
     const MYSQL_DBNAME = Deno.env.get("MYSQL_DBNAME")
+    const mySqlClient = await new Client().connect({    // データベースと接続
+        hostname: MYSQL_HOSTNAME,
+        username: MYSQL_USER,
+        password: MYSQL_PASSWORD,
+        db: MYSQL_DBNAME
+    })
 
         /********************************
         *            Diary              * 
@@ -39,12 +45,7 @@ serve(async (req) => {
     if (req.method === "POST" && pathname === "/insert-diary")
     {
         const reqJson = await req.json();   // 引数を取得
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
+        
 
         let [year, month, date] = reqJson.date.split('-');
         month = month.padStart(2, '0');
@@ -63,36 +64,23 @@ serve(async (req) => {
         )
         
         // MySQLのDBとの通信を終了する
-        mySqlClient.close()
+        
         return new Response("successed");
     }
 
     // すべての日記の取得
     // 引数:なし
     if (req.method === "GET" && pathname === "/get-diary") {
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
-
         const command = await mySqlClient.execute(`SELECT * FROM diary ORDER BY date ASC;`);
 
         // MySQLのDBとの通信を終了する
-        mySqlClient.close();
+        
         return new Response(JSON.stringify(command.rows));
     }
 
     // 特定の日付の日記の取得
     // 引数:{date}
     if (req.method === "GET" && pathname === "/get-daydiary") {
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
 
         let [year, month, date] = new URL(req.url).searchParams.get("date").split('-');
         month = month.padStart(2, '0');
@@ -106,7 +94,7 @@ serve(async (req) => {
         ]);
 
         // MySQLのDBとの通信を終了する
-        mySqlClient.close()
+        
         if (Object.keys(command.rows).length == 0) {
             return new Response("-1")
         } else {
@@ -119,12 +107,6 @@ serve(async (req) => {
     if (req.method === "POST" && pathname === "/delete-diary")
     {
         const reqJson = await req.json();   // 引数を取得
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
         
         const command = await mySqlClient.execute(`DELETE FROM diary WHERE (?? = ?); `, 
             [
@@ -134,7 +116,7 @@ serve(async (req) => {
         )
         
         // MySQLのDBとの通信を終了する
-        mySqlClient.close()
+        
         return new Response("successed");
     }
 
@@ -143,12 +125,6 @@ serve(async (req) => {
     if (req.method === "POST" && pathname === "/diary-date")
     {
         const reqJson = await req.json();   // 引数を取得
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
         
         
         let [year, month, date] = reqJson.date.split('-');
@@ -162,7 +138,7 @@ serve(async (req) => {
             ]
         )
         // MySQLのDBとの通信を終了する
-        mySqlClient.close();
+        
 
         const json = command.rows;
         let datelist = [];
@@ -219,12 +195,6 @@ serve(async (req) => {
     if (req.method === "POST" && pathname === "/insert-event")
     {
         const reqJson = await req.json();   // 引数を取得
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
 
         let [year, month, date] = reqJson.date.split('-');
         month = month.padStart(2, '0');
@@ -241,7 +211,7 @@ serve(async (req) => {
         )
         
         // MySQLのDBとの通信を終了する
-        mySqlClient.close()
+        
         return new Response("successed");
     }
 
@@ -250,12 +220,6 @@ serve(async (req) => {
     if (req.method === "POST" && pathname === "/delete-event")
     {
         const reqJson = await req.json();   // 引数を取得
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
         
         const command = await mySqlClient.execute(`DELETE FROM schedule WHERE (?? = ?);`, 
             [
@@ -265,36 +229,24 @@ serve(async (req) => {
         )
         
         // MySQLのDBとの通信を終了する
-        mySqlClient.close()
+        
         return new Response("successed");
     }
 
     // すべての予定の取得
     // 引数:なし
     if (req.method === "GET" && pathname === "/get-event") {
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
 
         const command = await mySqlClient.execute(`SELECT * FROM schedule ORDER BY date ASC;`);
 
         // MySQLのDBとの通信を終了する
-        mySqlClient.close();
+        
         return new Response(JSON.stringify(command.rows));
     }
 
     // 予定の取得
     // 引数:{date}
     if (req.method === "GET" && pathname === "/get-event-one") {
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
 
         let [year, month, date] = new URL(req.url).searchParams.get("date").split('-');
         month = month.padStart(2, '0');
@@ -307,7 +259,7 @@ serve(async (req) => {
             day
         ]);
         // MySQLのDBとの通信を終了する
-        mySqlClient.close();
+        
         if (Object.keys(command.rows).length == 0) {
             return new Response("-1")
         } else {
@@ -320,12 +272,6 @@ serve(async (req) => {
     if (req.method === "POST" && pathname === "/event-date")
     {
         const reqJson = await req.json();   // 引数を取得
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
         
         
         let [year, month, date] = reqJson.date.split('-');
@@ -339,7 +285,7 @@ serve(async (req) => {
             ]
         )
         // MySQLのDBとの通信を終了する
-        mySqlClient.close();
+        
 
         const json = command.rows;
         let datelist = [];
@@ -375,12 +321,6 @@ serve(async (req) => {
     if (req.method === "POST" && pathname === "/event-gpt")
     {
         const reqJson = await req.json();
-        const mySqlClient = await new Client().connect({    // データベースと接続
-            hostname: MYSQL_HOSTNAME,
-            username: MYSQL_USER,
-            password: MYSQL_PASSWORD,
-            db: MYSQL_DBNAME
-        })
 
         let [year, month, date] = reqJson.date.split('-');
         month = month.padStart(2, '0');
@@ -394,7 +334,7 @@ serve(async (req) => {
 
         console.log(command.rows);
         // MySQLのDBとの通信を終了する
-        mySqlClient.close();
+        
 
         let question = message;
         for (let i=0;i<Object.keys(command.rows).length;i++)

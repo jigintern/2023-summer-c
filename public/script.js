@@ -196,6 +196,9 @@ document.getElementById('bell').addEventListener('click', async function(){
   })
   const tmp = await response.text();
   const result = tmp.split(',');
+  console.log(result);
+  if (result[0] == "")
+    return;
   for (let i=0;i<result.length;i++) {
     confetti({
       particleCount: 100,

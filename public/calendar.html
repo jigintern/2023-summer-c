@@ -215,9 +215,11 @@
           // ---ここから日付&予定マーク要素の追加---
           const dateIconElem = document.createElement('div');
           dateIconElem.classList.add('icon-text');
+          dateIconElem.classList.add(thisDate)
 
           const dateElem = document.createElement('span');
           dateElem.classList.add('has-text-weight-bold');
+          dateElem.classList.add(thisDate)
           dateElem.textContent = dateCount.getDate();
 
           const iconElem = document.createElement('span');
@@ -245,7 +247,7 @@
             const stampElem = document.createElement('img');
             stampElem.setAttribute('src', 'img/hanamaru.png');
             stampElem.setAttribute('alt', 'はなまるスタンプ');
-            stampElem.classList.add('image', 'is-24x24')
+            stampElem.classList.add('image', 'is-24x24', thisDate)
             td.append(stampElem);
           }
 
@@ -255,8 +257,9 @@
             
               const id = e.target.className;
               console.log(id)
-              const regexPattern = /\d{4}-\d{1}-\d{1}/g;
-              const classDate = await id.match(regexPattern);
+              const idSplit = id.split(" ")
+              console.log(idSplit)
+              const classDate = idSplit[idSplit.length - 1]
               console.log(classDate)
 
               // 挿入する日記を取得&エレメントの作成
@@ -267,7 +270,7 @@
               }
               document.getElementById('diary').innerHTML = `<p>${diary}<p>`;
               // 挿入する予定を取得
-              const responseEvent = await fetch('/get-event-one?date=' + id);
+              const responseEvent = await fetch('/get-event-one?date=' + classDate);
               let event = await responseEvent.text();
               if (event === '-1') {
                 event = 'この日によていはありません';

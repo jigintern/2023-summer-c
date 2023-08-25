@@ -1,5 +1,23 @@
 import * as party from "https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.2/dist/confetti.browser.min.js";
 
+const weatherAPI = async() => {
+  // 位置情報の取得
+  if ('geolocation' in navigator) {
+    const geolocation = await navigator.geolocation;
+    await geolocation.getCurrentPosition(async(position) => {
+      console.log(`latitude: ${position.coords.latitude}, longitude: ${position.coords.longitude}`);
+      // バックへ投げる
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      await fetch(`/weather-api?lat=${lat}&lot=${lon}`)
+    });
+  } else {
+    console.error('this browser has not support geolocation.');
+  }
+}
+
+weatherAPI().catch((e) => {console.log(e)});
+
 // 開始時に実行する
 // 日記の全件取得
 window.onload = async () => {

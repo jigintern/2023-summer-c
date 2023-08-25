@@ -147,7 +147,16 @@ document.getElementById("gpt-button").onclick = async (e) => {
       words: words
     })
   });
-  document.getElementById("text-input").innerText = await response.text();
+
+  const message = await response.text();
+  if((message === "") || (message === "Not Found")){
+    window.alert("うまくいかなかったよ。もういちどためしてね！")
+    document.getElementById("gpt-button").classList.remove("is-loading");
+    document.getElementById("ai-img").style.visibility = "visible";
+    return;
+  }
+
+  document.getElementById("text-input").innerText = await message;
 
   // グルグルの無効化とAI画像の表示
   document.getElementById("gpt-button").classList.remove("is-loading");

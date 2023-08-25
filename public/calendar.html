@@ -225,6 +225,17 @@
           }
           // ---ここまで---
 
+          td.append(dateIconElem);
+
+          // スタンプの追加
+          if (diaryDateList.includes(dateToString(dateCount))) {
+            const stampElem = document.createElement('img');
+            stampElem.setAttribute('src', 'img/hanamaru.png');
+            stampElem.setAttribute('alt', 'はなまるスタンプ');
+            stampElem.classList.add('image', 'is-24x24')
+            td.append(stampElem);
+          }
+
           // <td>idに日付を添付
           const [thisYear, thisMonth, thisDay] = [
             dateCount.getFullYear(),
@@ -232,9 +243,9 @@
             dateCount.getDate(),
           ];
           const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
-          dateElem.id = thisDate;
+          td.id = thisDate;
           // クリックされたときの処理
-          dateElem.onclick = async (e) => {
+          td.onclick = async (e) => {
               const id = e.target.id;
               // 挿入する日記を取得&エレメントの作成
               const responseDiary = await fetch('/get-daydiary?date=' + id);
@@ -259,16 +270,7 @@
                 document.getElementById('modal-window').classList.remove('is-active');
               };
             };
-          td.append(dateIconElem);
 
-          // スタンプの追加
-          if (diaryDateList.includes(dateToString(dateCount))) {
-            const stampElem = document.createElement('img');
-            stampElem.setAttribute('src', 'img/hanamaru.png');
-            stampElem.setAttribute('alt', 'はなまるスタンプ');
-            stampElem.classList.add('image', 'is-24x24')
-            td.append(stampElem);
-          }
 
           // <tr>要素の配下に<td>要素を追加
           tr.append(td);

@@ -286,6 +286,35 @@ serve(async (req) => {
         return new Response(JSON.stringify(command.rows));
     }
 
+    // 予定の取得
+    // 引数:{date}
+    if (req.method === "GET" && pathname === "/get-event-one") {
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+
+        let [year, month, date] = new URL(req.url).searchParams.get("date").split('-');
+        month = month.padStart(2, '0');
+        date = date.padStart(2, '0');
+        const day = year + '-' + month + '-' + date;
+
+        const command = await mySqlClient.execute(`SELECT ?? FROM schedule WHERE date = ? ORDER BY date ASC;`,
+        [
+            "name",
+            day
+        ]);
+        // MySQLのDBとの通信を終了する
+        mySqlClient.close();
+        if (Object.keys(command.rows).length == 0) {
+            return new Response("-1")
+        } else {
+            return new Response(command.rows[0]["name"]);
+        }
+    }
+
     // 指定した月の中で予定が書かれている日の日付一覧を返す
     // 引数:{date}
     if (req.method === "POST" && pathname === "/event-date")

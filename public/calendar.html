@@ -191,6 +191,15 @@
         const tr = document.createElement('tr');
 
         for (let i = 0; i < 7; i++) {
+
+          // 日付の生成
+          const [thisYear, thisMonth, thisDay] = [
+            dateCount.getFullYear(),
+            dateCount.getMonth() + 1,
+            dateCount.getDate(),
+          ];
+          const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
+
           // <td>要素を生成
           const td = document.createElement('td');
           // class属性の設定
@@ -201,7 +210,7 @@
           if (dateCount.toLocaleDateString() === today.toLocaleDateString()) {
             attr += ' has-background-warning';
           }
-          td.setAttribute('class', attr);
+          td.setAttribute('class', attr, thisDate);
 
           // ---ここから日付&予定マーク要素の追加---
           const dateIconElem = document.createElement('div');
@@ -214,9 +223,13 @@
           const iconElem = document.createElement('span');
           iconElem.classList.add('icon', 'is-small');
 
+          iconElem.classList.add(thisDate);
+
           const iElem = document.createElement('i')
           iElem.setAttribute('class', 'fas fa-solid fa-star');
           iElem.setAttribute('style', 'color: #e7b11d;');
+
+          iElem.classList.add(thisDate);
 
           iconElem.append(iElem);
           dateIconElem.append(dateElem);
@@ -236,19 +249,18 @@
             td.append(stampElem);
           }
 
-          // <td>idに日付を添付
-          const [thisYear, thisMonth, thisDay] = [
-            dateCount.getFullYear(),
-            dateCount.getMonth() + 1,
-            dateCount.getDate(),
-          ];
-          const thisDate = thisYear + '-' + thisMonth + '-' + thisDay;
-          td.id = thisDate;
+          td.classList.add(thisDate);
           // クリックされたときの処理
           td.onclick = async (e) => {
-              const id = e.target.id;
+            
+              const id = e.target.className;
+              console.log(id)
+              const regexPattern = /\d{4}-\d{1}-\d{1}/g;
+              const classDate = await id.match(regexPattern);
+              console.log(classDate)
+
               // 挿入する日記を取得&エレメントの作成
-              const responseDiary = await fetch('/get-daydiary?date=' + id);
+              const responseDiary = await fetch('/get-daydiary?date=' + classDate);
               let diary = await responseDiary.text();
               if (diary === '-1') {
                 diary = 'この日ににっきはありません。';

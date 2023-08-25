@@ -12,12 +12,13 @@ import { fetchChat } from "https://code4fukui.github.io/ai_chat/fetchChat.js";
 
 const message =
 `# 命令
-以下の「制約」に基づいて、日記を出力してください。
+以下の「制約」をすべて守った、日記を出力してください。
 # 制約
 - 2文または3文で構成される。
 - 常体で書く。
 - 以下の「単語」を使用する。
-- 小学校4年生までで習う範囲の漢字を使用する。
+- 小学生4年生程度の語彙を使用する。
+- すべての文字をひらがなまたはカタカナで表記する。
 # 単語
 `
 
@@ -283,6 +284,35 @@ serve(async (req) => {
         // MySQLのDBとの通信を終了する
         mySqlClient.close();
         return new Response(JSON.stringify(command.rows));
+    }
+
+    // 予定の取得
+    // 引数:{date}
+    if (req.method === "GET" && pathname === "/get-event-one") {
+        const mySqlClient = await new Client().connect({    // データベースと接続
+            hostname: MYSQL_HOSTNAME,
+            username: MYSQL_USER,
+            password: MYSQL_PASSWORD,
+            db: MYSQL_DBNAME
+        })
+
+        let [year, month, date] = new URL(req.url).searchParams.get("date").split('-');
+        month = month.padStart(2, '0');
+        date = date.padStart(2, '0');
+        const day = year + '-' + month + '-' + date;
+
+        const command = await mySqlClient.execute(`SELECT ?? FROM schedule WHERE date = ? ORDER BY date ASC;`,
+        [
+            "name",
+            day
+        ]);
+        // MySQLのDBとの通信を終了する
+        mySqlClient.close();
+        if (Object.keys(command.rows).length == 0) {
+            return new Response("-1")
+        } else {
+            return new Response(command.rows[0]["name"]);
+        }
     }
 
     // 指定した月の中で予定が書かれている日の日付一覧を返す
